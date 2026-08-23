@@ -12,27 +12,13 @@ import {
 } from './mcp-protocol'
 
 export interface McpRouteOptions {
-  /** Server name reported to clients. Defaults to the site name. */
   name?: string
   version?: string
-  /** Replaces the built-in `list-pages` / `get-page` pair. */
   tools?: McpTool[]
 }
 
 const JSON_HEADERS = { 'content-type': 'application/json' }
 
-/**
- * Model Context Protocol server over Streamable HTTP.
- *
- * Stateless: every POST is answered with a single JSON-RPC response, which the
- * transport permits and which suits a read-only documentation server — there
- * is no session to keep, so nothing to lose between requests.
- *
- * ```ts
- * // app/mcp/route.ts
- * export const { GET, POST, DELETE } = createMcpRoute(source, docsConfig)
- * ```
- */
 export function createMcpRoute(
   source: DocsSource,
   config: DocsConfig,
@@ -138,12 +124,10 @@ export function createMcpRoute(
       })
     },
 
-    /** No server-initiated stream to open, so the SSE channel is declined. */
     GET() {
       return new Response('Method Not Allowed', { status: 405, headers: { allow: 'POST' } })
     },
 
-    /** Nothing is stored per session, so there is nothing to delete. */
     DELETE() {
       return new Response('Method Not Allowed', { status: 405, headers: { allow: 'POST' } })
     },

@@ -63,10 +63,6 @@ function plainFence(code: string): string {
   return `<pre><code data-theme="github-light github-dark">${lines}</code></pre>`
 }
 
-/**
- * Highlight a fence for the assistant chat, using the same dual GitHub themes
- * as compiled docs so token colours follow light/dark mode.
- */
 export async function highlightCode(code: string, lang = 'text'): Promise<string> {
   const highlighter = await getHighlighter()
   const resolved = resolveLang(lang)

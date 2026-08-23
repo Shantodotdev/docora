@@ -5,10 +5,6 @@ import type { SocialKey } from '../config/types'
 
 type IconProps = SVGProps<SVGSVGElement>
 
-/**
- * Brand marks, inlined because lucide dropped brand icons.
- * Paths are the official simple-icons glyphs.
- */
 const BRAND_ICONS: Record<string, (props: IconProps) => React.ReactElement> = {
   github: props => (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...props}>

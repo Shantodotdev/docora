@@ -4,21 +4,13 @@ import { visit } from 'unist-util-visit'
 export interface TocEntry {
   id: string
   text: string
-  /** Heading level: 2 for `##`, 3 for `###`, … */
   depth: number
 }
 
-/** A `TocEntry` with its deeper headings nested underneath. */
 export interface TocNode extends TocEntry {
   children: TocNode[]
 }
 
-/**
- * Nest a flat heading list by depth.
- *
- * `compileMdx` returns the flat list because scroll tracking needs headings in
- * document order; the rendered list wants them as a tree.
- */
 export function buildTocTree(entries: TocEntry[]): TocNode[] {
   const root: TocNode[] = []
   const stack: TocNode[] = []
@@ -48,12 +40,6 @@ function textContent(node: Nodes): string {
   return ''
 }
 
-/**
- * Collects headings into `entries` while the document is being compiled.
- *
- * Runs after `rehype-slug`, so every heading already carries the `id` the
- * table of contents links to.
- */
 export function rehypeCollectToc(entries: TocEntry[]) {
   return function collect() {
     return (tree: Root) => {

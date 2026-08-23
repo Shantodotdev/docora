@@ -17,7 +17,6 @@ export function DocsConfigProvider({
   return <DocsConfigContext.Provider value={config}>{children}</DocsConfigContext.Provider>
 }
 
-/** Read the site configuration from any client component inside `DocsRoot`. */
 export function useDocsConfig(): DocsConfig {
   return useContext(DocsConfigContext)
 }

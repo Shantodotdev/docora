@@ -8,12 +8,6 @@ import type { DocsSource } from '../content/index'
 import { buildSearchIndex } from '../search/build'
 import { searchDocuments } from '../search/match'
 
-/**
- * The two tools the assistant answers with.
- *
- * They mirror the MCP server's pair, so an editor connecting over MCP and the
- * in-page chat read the documentation exactly the same way.
- */
 export function createAssistantTools(source: DocsSource, config: DocsConfig) {
   return {
     'search-docs': tool({

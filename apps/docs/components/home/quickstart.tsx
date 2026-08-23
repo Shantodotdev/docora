@@ -92,9 +92,8 @@ function StepCard({
   const number = (
     <div
       className={cn(
-        'flex w-16 shrink-0 items-center justify-center self-stretch border-border sm:w-20',
-        'order-first border-e',
-        side === 'left' && 'md:order-last md:border-e-0 md:border-s',
+        'hidden w-20 shrink-0 items-center justify-center self-stretch border-border lg:flex',
+        side === 'left' ? 'order-last border-s' : 'order-first border-e',
       )}
     >
       <StepNumber index={index} />
@@ -106,17 +105,25 @@ function StepCard({
       <span
         aria-hidden
         className={cn(
-          'absolute top-1/2 z-10 size-2.5 -translate-y-1/2 rotate-45 border-border bg-background',
+          'absolute top-1/2 z-10 hidden size-2.5 -translate-y-1/2 rotate-45 border-border bg-background lg:block',
           side === 'left'
-            ? 'start-0 -translate-x-1/2 border-b border-l md:start-auto md:end-0 md:translate-x-1/2 md:border-t md:border-r md:border-b-0 md:border-l-0'
-            : 'start-0 -translate-x-1/2 border-b border-l',
+            ? 'lg:end-0 lg:translate-x-1/2 lg:border-t lg:border-r'
+            : 'lg:start-0 lg:-translate-x-1/2 lg:border-b lg:border-l',
         )}
       />
 
       {number}
 
-      <div className="min-w-0 flex-1 px-5 py-4 sm:px-6 sm:py-5">
-        <p className="font-semibold tracking-tight text-highlighted">{step.title}</p>
+      <div className="min-w-0 flex-1 px-4 py-4 sm:px-6 sm:py-5">
+        <div className="flex items-center gap-2.5">
+          <span
+            aria-hidden
+            className="inline-flex size-7 shrink-0 items-center justify-center rounded-full bg-primary/10 font-mono text-xs font-semibold text-primary lg:hidden"
+          >
+            {String(index + 1).padStart(2, '0')}
+          </span>
+          <p className="min-w-0 font-semibold tracking-tight text-highlighted">{step.title}</p>
+        </div>
         <p className="mt-1.5 text-sm leading-6 text-muted-foreground">{step.body}</p>
         {children}
       </div>
@@ -135,10 +142,10 @@ export function Quickstart() {
           description="Scaffold a site, start the dev server, and start writing. Node.js 20.9 or later is required."
         />
 
-        <ol className="relative mt-14">
+        <ol className="relative mt-14 space-y-4 lg:space-y-0">
           <span
             aria-hidden
-            className="absolute inset-y-6 start-4 w-px -translate-x-1/2 bg-border md:start-1/2"
+            className="absolute inset-y-6 start-1/2 hidden w-px -translate-x-1/2 bg-border lg:block"
           />
 
           {STEPS.map((step, index) => {
@@ -147,16 +154,16 @@ export function Quickstart() {
             return (
               <li
                 key={step.title}
-                className="relative grid grid-cols-[2rem_1fr] items-center gap-x-4 py-4 md:grid-cols-[1fr_2.5rem_1fr] md:gap-x-10 md:py-5"
+                className="relative grid items-center lg:grid-cols-[1fr_2.5rem_1fr] lg:gap-x-10 lg:py-5"
               >
-                <div className="relative z-10 col-start-1 row-start-1 flex items-center justify-center md:col-start-2">
+                <div className="relative z-10 hidden items-center justify-center lg:col-start-2 lg:row-start-1 lg:flex">
                   <span className="size-3 rounded-full bg-primary ring-4 ring-background" />
                 </div>
 
                 <div
                   className={cn(
-                    'col-start-2 row-start-1',
-                    side === 'left' ? 'md:col-start-1' : 'md:col-start-3',
+                    'min-w-0 lg:row-start-1',
+                    side === 'left' ? 'lg:col-start-1' : 'lg:col-start-3',
                   )}
                 >
                   <StepCard step={step} index={index} side={side}>

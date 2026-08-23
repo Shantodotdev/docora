@@ -1,5 +1,6 @@
-import Link from 'next/link'
 import type { MDXComponents } from 'mdx/types'
+import Image from 'next/image'
+import Link from 'next/link'
 import type { AnchorHTMLAttributes, HTMLAttributes } from 'react'
 
 import { cn } from '../utils/cn'
@@ -43,34 +44,52 @@ import {
 } from '../mdc/index'
 import { Icon } from '../components/icon'
 
+function imageAlt(alt: string | undefined, src: string) {
+  const trimmed = alt?.trim()
+  if (trimmed) return trimmed
+  const name = src.split(/[\\/]/).pop()?.split('?')[0]?.replace(/\.[^.]+$/, '') ?? ''
+  return name.replace(/[-_]+/g, ' ').trim() || 'Documentation image'
+}
+
+function toSize(value: string | number | undefined, fallback: number) {
+  const parsed = typeof value === 'number' ? value : Number(value)
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback
+}
+
 function Anchor({
   href = '',
   className,
-  ...props
+  children,
+  target,
+  rel,
+  title,
 }: Readonly<AnchorHTMLAttributes<HTMLAnchorElement>>) {
   const classes = cn(
     'font-medium text-primary underline decoration-primary/40 underline-offset-4 transition-colors hover:decoration-primary',
     className,
   )
 
-  if (href.startsWith('/')) {
-    return <Link href={href} className={classes} {...props} />
-  }
+  if (!href) return <span className={classes}>{children}</span>
+
+  const external = href.startsWith('http')
 
   return (
-    <a
+    <Link
       href={href}
       className={classes}
-      {...(href.startsWith('http') ? { target: '_blank', rel: 'noreferrer' } : {})}
-      {...props}
-    />
+      title={title}
+      prefetch={href.startsWith('#') ? false : undefined}
+      {...(target
+        ? { target, rel }
+        : external
+          ? { target: '_blank', rel: 'noreferrer' }
+          : {})}
+    >
+      {children}
+    </Link>
   )
 }
 
-/**
- * Headings carry an `id` from `rehype-slug`, which the table of contents links
- * to. When one is present, reveal a permalink on hover.
- */
 function Heading({
   as: Tag,
   className,
@@ -81,24 +100,19 @@ function Heading({
     <Tag className={cn('group scroll-m-20', className)} {...props}>
       {children}
       {props.id && (
-        <a
+        <Link
           href={`#${props.id}`}
+          prefetch={false}
           aria-label="Link to this section"
           className="ml-2 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
         >
-          {/* Hidden from the accessibility tree so it stays out of the heading's name. */}
           <span aria-hidden>#</span>
-        </a>
+        </Link>
       )}
     </Tag>
   )
 }
 
-/**
- * Default element mapping used when rendering docs content.
- *
- * Consumers can extend it: `getMdxComponents({ Callout })`.
- */
 export const defaultMdxComponents: MDXComponents = {
   h1: props => (
     <h1 className="mt-2 scroll-m-20 text-3xl font-bold tracking-tight sm:text-4xl" {...props} />
@@ -146,15 +160,23 @@ export const defaultMdxComponents: MDXComponents = {
     />
   ),
   td: props => <td className="border border-border px-4 py-2" {...props} />,
-  img: props => (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img className="mt-6 rounded-lg border border-border" alt="" {...props} />
-  ),
+  img: ({ src, alt, width, height, className }) => {
+    if (typeof src !== 'string' || !src) return null
+
+    return (
+      <Image
+        src={src}
+        alt={imageAlt(alt, src)}
+        width={toSize(width, 1600)}
+        height={toSize(height, 900)}
+        sizes="(min-width: 768px) 768px, 100vw"
+        className={cn('mt-6 h-auto w-full rounded-lg border border-border', className)}
+        unoptimized={src.startsWith('http') || /\.svg(?:$|\?)/i.test(src)}
+      />
+    )
+  },
 }
 
-/**
- * Components documents can use by name, without importing anything.
- */
 export const mdxShortcodes: MDXComponents = {
   // MDC lowercases component names, so both spellings are registered: content
   // can use `::card-group` or JSX `<CardGroup>`.
@@ -233,7 +255,6 @@ export const mdxShortcodes: MDXComponents = {
   'feature-grid': FeatureGrid,
 }
 
-/** Merge extra components on top of the theme defaults. */
 export function getMdxComponents(components?: MDXComponents): MDXComponents {
   return { ...defaultMdxComponents, ...mdxShortcodes, ...components }
 }

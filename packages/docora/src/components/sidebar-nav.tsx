@@ -10,12 +10,10 @@ import { Icon } from './icon'
 
 export type SidebarNavProps = Readonly<{
   items: NavItem[]
-  /** Called after a link is followed — used to close the mobile drawer. */
   onNavigate?: () => void
   className?: string
 }>
 
-/** Shared row geometry: `size-5` icons and `py-1.5` give 2rem rows. */
 const ROW = 'group relative flex w-full items-center gap-1.5 px-2.5 py-1.5 text-sm'
 
 function NavTree({
@@ -88,7 +86,6 @@ function NavTree({
   )
 }
 
-/** The documentation tree, shared by the desktop aside and the mobile drawer. */
 export function SidebarNav({ items, onNavigate, className }: SidebarNavProps) {
   const messages = useMessages()
 

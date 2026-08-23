@@ -7,15 +7,8 @@ import { localeFromPath } from '../i18n/paths'
 import { extractHeadings, toSearchableText } from './text'
 import type { SearchDocument, SearchIndex } from './types'
 
-/** Keeps the shipped index small; matches still rank on the whole prefix. */
 const MAX_CONTENT_LENGTH = 8000
 
-/**
- * Reads every page once and reduces it to a searchable record.
- *
- * Built on the server — either at build time through a static route, or per
- * request in development — so the client only ever downloads the result.
- */
 export async function buildSearchIndex(
   source: DocsSource,
   i18n?: I18nConfig,

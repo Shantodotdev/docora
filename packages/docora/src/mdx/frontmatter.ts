@@ -8,7 +8,6 @@ export interface Frontmatter {
 
 const FRONTMATTER_RE = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?/
 
-/** Split a `---` YAML frontmatter block off the top of a markdown source. */
 export function splitFrontmatter<F extends Frontmatter = Frontmatter>(source: string) {
   const match = source.match(FRONTMATTER_RE)
 

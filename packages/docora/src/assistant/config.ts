@@ -1,42 +1,24 @@
 export interface AssistantConfig {
-  /** Set to `false` to keep the assistant off even when a key is present. */
   enabled?: boolean
-  /** AI Gateway model string. Defaults to `google/gemini-2.5-flash`. */
   model?: string
-  /** Where the chat route is mounted. Defaults to `/api/assistant`. */
   endpoint?: string
-  /** Replaces the built-in system prompt. */
   systemPrompt?: string
-  /** Starter questions offered in an empty conversation. */
   suggestions?: string[]
-  /** Show the "Explain with AI" button under the table of contents. */
   explainWithAi?: boolean
 }
 
 export const DEFAULT_ASSISTANT_MODEL = 'google/gemini-2.5-flash'
 export const DEFAULT_ASSISTANT_ENDPOINT = '/api/assistant'
 
-/**
- * Whether a credential is available to talk to the AI Gateway.
- *
- * Server-only: the key never reaches the browser. Vercel deployments
- * authenticate with an OIDC token instead of a key, so either counts.
- */
 export function isAssistantConfigured(): boolean {
   return Boolean(process.env.AI_GATEWAY_API_KEY || process.env.VERCEL_OIDC_TOKEN)
 }
 
-/**
- * The assistant is on when a credential exists and the config has not turned
- * it off. Without a credential there is nothing to render — the UI is absent
- * rather than disabled.
- */
 export function isAssistantEnabled(config?: AssistantConfig): boolean {
   if (config?.enabled === false) return false
   return isAssistantConfigured()
 }
 
-/** Built-in prompt. Pass the site name so answers speak as that project's guide. */
 export function defaultSystemPrompt(siteName = 'this website'): string {
   return [
     `You are the documentation assistant for ${siteName}. Help users navigate and understand the project documentation.`,

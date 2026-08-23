@@ -1,12 +1,9 @@
 export interface Locale {
-  /** BCP 47 code used in the URL and in `<html lang>`, e.g. `en` or `pt-BR`. */
   code: string
-  /** Shown in the language switcher. */
   name: string
   dir?: 'ltr' | 'rtl'
 }
 
-/** Every string the theme renders itself. */
 export interface Messages {
   searchButton: string
   searchPlaceholder: string
@@ -34,9 +31,7 @@ export interface Messages {
 }
 
 export interface I18nConfig {
-  /** Locale served when a request has none. */
   defaultLocale: string
   locales: Locale[]
-  /** Per-locale overrides of the theme's own strings. */
   messages?: Record<string, Partial<Messages>>
 }

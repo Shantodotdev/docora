@@ -14,10 +14,6 @@ export type AccordionItemProps = Readonly<{
   className?: string
 }>
 
-/**
- * Rendered by `Accordion`, which reads the label and icon off each child.
- * On its own it just renders its body.
- */
 export function AccordionItem({ children }: AccordionItemProps) {
   return <>{children}</>
 }

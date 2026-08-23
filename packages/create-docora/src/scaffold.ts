@@ -5,10 +5,6 @@ import { fileURLToPath } from 'node:url'
 
 import { toPackageName } from './project-name'
 
-/**
- * npm strips a `.gitignore` out of a published tarball, so the starter keeps
- * its copy under a placeholder name and it is restored on scaffold.
- */
 const RENAMES: Record<string, string> = {
   _gitignore: '.gitignore',
   _npmrc: '.npmrc',
@@ -27,7 +23,6 @@ export async function listTemplates(): Promise<string[]> {
   }
 }
 
-/** True when the directory is missing, empty, or holds only noise. */
 export async function isUsableTarget(directory: string): Promise<boolean> {
   if (!existsSync(directory)) return true
 
@@ -35,7 +30,6 @@ export async function isUsableTarget(directory: string): Promise<boolean> {
   return entries.filter(entry => entry !== '.git' && entry !== '.DS_Store').length === 0
 }
 
-/** Clears a directory in place so `.` can be overridden without deleting the cwd. */
 export async function emptyDirectory(directory: string): Promise<void> {
   if (!existsSync(directory)) return
 

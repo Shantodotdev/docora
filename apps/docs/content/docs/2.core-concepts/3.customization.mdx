@@ -31,7 +31,7 @@ covers the common cases; slots cover the rest.
 ### Logo
 
 Set `header.logo` when you have image files. Light and dark swap with the
-colour mode; `className` is applied to both `<img>` tags (for example
+colour mode; `className` is applied to both images (for example
 `h-8` to enlarge it):
 
 ```ts [docs.config.ts]
@@ -262,7 +262,12 @@ Put custom artwork in `public/` and reference it as an image, or pass an SVG
 component through a slot:
 
 ```tsx
-<SiteHeader logo={<img src="/logo.svg" alt="Acme" className="h-6 w-auto" />} />
+import Image from 'next/image'
+import { SiteHeader } from 'docora'
+
+<SiteHeader
+  logo={<Image src="/logo.svg" alt="Acme" width={96} height={24} className="h-6 w-auto" />}
+/>
 ```
 
 In MDX, `:icon{name="rocket"}` renders the same `Icon` component the chrome

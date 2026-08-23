@@ -9,14 +9,6 @@ import {
 } from '@shikijs/transformers'
 import { visit } from 'unist-util-visit'
 
-/**
- * Turns fence extras into the meta rehype-pretty-code understands:
- *
- * ```ts [next.config.ts]
- * ```ts [next.config.ts]{1,3-5}
- * ```ts [app.css] line-numbers
- * ```
- */
 export function filterCodeMeta(meta: string): string {
   let next = meta
 
@@ -42,11 +34,6 @@ function isElement(node: Root['children'][number] | Element['children'][number])
   return node.type === 'element'
 }
 
-/**
- * Copies the title, language and line-number flags Pretty Code hangs on nested
- * nodes onto the wrapping `<figure>`, so React components can read them as
- * props (`::code-group` tabs, the filename header, …).
- */
 export function rehypePrettyCodeFigure() {
   return (tree: Root) => {
     visit(tree, 'element', (node: Element) => {
@@ -81,7 +68,6 @@ export function rehypePrettyCodeFigure() {
   }
 }
 
-/** Dual-theme Pretty Code config used when compiling MDX. */
 export const prettyCodeOptions: PrettyCodeOptions = {
   keepBackground: false,
   bypassInlineCode: true,
@@ -96,15 +82,6 @@ export const prettyCodeOptions: PrettyCodeOptions = {
   ],
 }
 
-/**
- * Reads extras in a fence's meta string and hangs them on the `<pre>` so a
- * Shiki pipeline can render a header. Prefer Pretty Code for compiled docs;
- * this remains for anyone highlighting with Shiki directly.
- *
- * ```ts [next.config.ts]
- * ```ts [next.config.ts]{1,3-5}
- * ```
- */
 export function transformerCodeMeta(): ShikiTransformer {
   return {
     name: 'docora:code-meta',
@@ -123,7 +100,6 @@ export function transformerCodeMeta(): ShikiTransformer {
   }
 }
 
-/** Extension → icon name, used for the little mark beside a filename. */
 const FILENAME_ICONS: Record<string, string> = {
   ts: 'file-code',
   tsx: 'file-code',

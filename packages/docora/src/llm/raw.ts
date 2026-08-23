@@ -3,29 +3,15 @@ import { readFile } from 'node:fs/promises'
 import type { DocsSource } from '../content/index'
 import type { ContentPage } from '../content/types'
 
-/**
- * Slug segments for a page's raw route. The site root has no segments of its
- * own, so it is served as `index.md`.
- */
 export function rawSlug(page: Pick<ContentPage, 'slug'>): string[] {
   if (page.slug.length === 0) return ['index.md']
   return [...page.slug.slice(0, -1), `${page.slug.at(-1)}.md`]
 }
 
-/** The URL path `rawSlug` corresponds to. */
 export function rawPath(page: Pick<ContentPage, 'slug'>): string {
   return `/raw/${rawSlug(page).join('/')}`
 }
 
-/**
- * `/raw/{path}.md` — a page's markdown source, for tools that would rather
- * read the document than scrape the rendered page.
- *
- * ```ts
- * // app/raw/[...slug]/route.ts
- * export const { GET, dynamic, generateStaticParams } = createRawRoute(source)
- * ```
- */
 export function createRawRoute(source: DocsSource) {
   return {
     dynamic: 'force-static' as const,

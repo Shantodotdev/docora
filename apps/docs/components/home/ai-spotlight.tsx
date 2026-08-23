@@ -26,7 +26,6 @@ const STATS = [
   { value: 'llms.txt', label: 'Agent-readable index' },
 ]
 
-/** A mocked agent session: question, MCP tool call, grounded answer. */
 function AgentTranscript() {
   return (
     <Window

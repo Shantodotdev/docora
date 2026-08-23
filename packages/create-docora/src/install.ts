@@ -4,7 +4,6 @@ import { installDependencies as nypmInstall } from 'nypm'
 
 import type { PackageManager } from './package-manager'
 
-/** Silent install so Clack can show a loading task instead of a raw log dump. */
 export async function installDependencies(manager: PackageManager, cwd: string): Promise<void> {
   await nypmInstall({
     cwd,

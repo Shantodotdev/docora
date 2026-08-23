@@ -1,9 +1,7 @@
 import type { Metadata } from 'next'
-
 import type { DocsConfig } from '../config/types'
 import type { ContentPage } from '../content/types'
 
-/** Absolute URL for a path, when the site URL is configured. */
 export function absoluteUrl(config: DocsConfig, path: string): string | undefined {
   if (!config.site.url) return undefined
   return new URL(path, config.site.url).toString()
@@ -11,18 +9,10 @@ export function absoluteUrl(config: DocsConfig, path: string): string | undefine
 
 export interface PageMetadataOptions {
   config: DocsConfig
-  /** The page being rendered. Omit for the site-wide defaults. */
   page?: Pick<ContentPage, 'path' | 'title'> & { frontmatter?: { description?: string } }
-  /** `locale -> path` for the same document, from `source.getAlternates()`. */
   alternates?: Record<string, string>
 }
 
-/**
- * Title, description, canonical URL and social cards for one page.
- *
- * Falls back to the site description, and skips absolute URLs entirely when
- * `site.url` is unset — a relative canonical would be worse than none.
- */
 export function createPageMetadata({ config, page, alternates }: PageMetadataOptions): Metadata {
   const siteName = config.seo?.title ?? config.site.name
   const title = page?.title

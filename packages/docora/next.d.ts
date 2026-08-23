@@ -1,7 +1,6 @@
 import type { NextConfig } from 'next'
 
 export interface DocoraConfig extends NextConfig {
-  /** Content directory, relative to the project root. Defaults to `content`. */
   contentDir?: string
 }
 

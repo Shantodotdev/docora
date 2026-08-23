@@ -7,9 +7,9 @@ import { Menu, X } from 'lucide-react'
 
 import { useDocsConfig } from '../config/context'
 import { useMessages } from '../i18n/context'
+import { BrandMark } from './brand'
 import { SidebarNav } from './sidebar-nav'
 
-/** Hamburger trigger plus the slide-in drawer holding the documentation tree. */
 export function MobileNav() {
   const config = useDocsConfig()
   const messages = useMessages()
@@ -36,8 +36,9 @@ export function MobileNav() {
 
         <Dialog.Content className="fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] flex-col border-r border-border bg-background shadow-lg focus:outline-none">
           <div className="flex h-16 items-center justify-between border-b border-border px-4">
-            <Dialog.Title className="text-sm font-semibold tracking-tight">
-              {config.header?.title ?? config.site.name}
+            <Dialog.Title className="flex min-w-0 items-center gap-2 text-sm font-semibold tracking-tight">
+              <BrandMark className="shrink-0" />
+              <span className="truncate">{config.header?.title ?? config.site.name}</span>
             </Dialog.Title>
 
             <Dialog.Close

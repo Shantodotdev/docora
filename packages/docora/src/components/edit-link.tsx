@@ -1,17 +1,12 @@
 'use client'
 
 import { Pencil, TriangleAlert } from 'lucide-react'
+import Link from 'next/link'
 
 import { useDocsConfig } from '../config/context'
 import type { DocsConfig } from '../config/types'
 import { cn } from '../utils/cn'
 
-/**
- * Link to edit a page on GitHub.
- *
- * Returns undefined unless `github.url` is set, so a site without a repository
- * simply has no edit affordance.
- */
 export function createEditUrl(config: DocsConfig, relativePath: string): string | undefined {
   const repository = config.github?.url
   if (!repository) return undefined
@@ -23,7 +18,6 @@ export function createEditUrl(config: DocsConfig, relativePath: string): string 
   return `${repository.replace(/\/+$/, '')}/edit/${branch}/${segments}`
 }
 
-/** URL of the repository's issue form, pre-titled with the page. */
 export function createIssueUrl(config: DocsConfig, title: string): string | undefined {
   const repository = config.github?.url
   if (!repository) return undefined
@@ -33,14 +27,11 @@ export function createIssueUrl(config: DocsConfig, title: string): string | unde
 }
 
 export type PageLinksProps = Readonly<{
-  /** Page path relative to the content directory. */
   relativePath?: string
-  /** Page title, used to pre-fill the issue. */
   title?: string
   className?: string
 }>
 
-/** "Edit this page" and "Report an issue", shown under the table of contents. */
 export function PageLinks({ relativePath, title, className }: PageLinksProps) {
   const config = useDocsConfig()
 
@@ -56,19 +47,19 @@ export function PageLinks({ relativePath, title, className }: PageLinksProps) {
     <ul className={cn('space-y-2', className)}>
       {editUrl && (
         <li>
-          <a href={editUrl} target="_blank" rel="noreferrer" className={linkClass}>
+          <Link href={editUrl} target="_blank" rel="noreferrer" className={linkClass}>
             <Pencil className="size-4 shrink-0" aria-hidden />
             Edit this page
-          </a>
+          </Link>
         </li>
       )}
 
       {issueUrl && (
         <li>
-          <a href={issueUrl} target="_blank" rel="noreferrer" className={linkClass}>
+          <Link href={issueUrl} target="_blank" rel="noreferrer" className={linkClass}>
             <TriangleAlert className="size-4 shrink-0" aria-hidden />
             Report an issue
-          </a>
+          </Link>
         </li>
       )}
     </ul>

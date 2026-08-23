@@ -1,23 +1,13 @@
 import type { CSSProperties } from 'react'
 
-/** One table-of-contents row, in rem. The rail geometry is derived from it. */
 export const TOC_LINK_HEIGHT_REM = 1.75
 
 const SVG_UNIT = 16
 const ROW = TOC_LINK_HEIGHT_REM * SVG_UNIT
-/** Horizontal track positions inside the 12-wide viewBox. */
 const X_ROOT = 0.5
 const X_NESTED = 10.5
-/** How far before a level change the vertical run stops, leaving room for the jog. */
 const JOG = 6
 
-/**
- * Builds the "circuit" rail: a single stroked path that runs beside the
- * headings and steps sideways where the list changes depth.
- *
- * The path is applied as a mask, so the grey track and the coloured active
- * segment are both plain divs clipped to this shape.
- */
 export function circuitRailStyle(levels: number[]): CSSProperties | undefined {
   if (levels.length === 0) return undefined
 

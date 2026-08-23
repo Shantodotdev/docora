@@ -12,6 +12,7 @@ export { SearchButton } from './components/search-button'
 export { MobileNav } from './components/mobile-nav'
 export { Icon, type IconProps } from './components/icon'
 export { RouteProgress, type RouteProgressProps } from './components/route-progress'
+export { startRouteProgress } from './components/route-progress-target'
 export { DocsPager } from './components/docs-pager'
 export {
   PageLinks,

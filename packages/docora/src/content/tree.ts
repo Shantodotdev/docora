@@ -10,13 +10,11 @@ import type { ContentPage, DirectoryMeta, PageFrontmatter } from './types'
 const PAGE_EXTENSIONS = ['.md', '.mdx']
 const DIRECTORY_META_FILE = '.navigation.yml'
 
-/** A directory in the content tree, with its own pages and subdirectories. */
 export interface ContentDirectory {
   name: string
   slug: string[]
   order: number
   meta: DirectoryMeta
-  /** The `index.md(x)` representing the directory itself, if present. */
   index?: ContentPage
   pages: ContentPage[]
   directories: ContentDirectory[]
@@ -53,12 +51,6 @@ async function readPage(
   }
 }
 
-/**
- * Walk the content directory into a tree.
- *
- * Ordering comes from numeric filename prefixes (`1.installation.mdx`), which
- * are stripped from the route; anything unprefixed sorts last, alphabetically.
- */
 export async function readContentTree(
   contentDir: string,
   relativeSlug: string[] = [],
@@ -114,7 +106,6 @@ export async function readContentTree(
   return directory
 }
 
-/** Every page in the tree, in navigation order. */
 export function flattenPages(directory: ContentDirectory): ContentPage[] {
   const pages: ContentPage[] = []
 
@@ -128,7 +119,6 @@ export function flattenPages(directory: ContentDirectory): ContentPage[] {
   return pages
 }
 
-/** Find a directory by its slug, so a section can be used as the nav root. */
 export function findDirectory(
   directory: ContentDirectory,
   slug: string[],

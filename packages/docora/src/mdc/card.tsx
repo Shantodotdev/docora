@@ -1,25 +1,40 @@
 import { ArrowUpRight } from 'lucide-react'
-import Link from 'next/link'
+import Image from 'next/image'
 import type { ReactNode } from 'react'
 
 import { Icon } from '../components/icon'
+import { LinkedBox } from '../components/linked-box'
 import { cn } from '../utils/cn'
 
 export type CardProps = Readonly<{
   children?: ReactNode
   title?: string
   icon?: string
+  src?: string
+  invert?: boolean | string
   to?: string
   target?: string
   className?: string
 }>
 
-export function Card({ children, title, icon, to, target, className }: CardProps) {
+export function Card({ children, title, icon, src, invert, to, target, className }: CardProps) {
   const external = to?.startsWith('http') ?? false
+  const shouldInvert = invert === true || invert === '' || invert === 'true'
 
   const body = (
     <>
-      {icon && <Icon name={icon} className="size-5 shrink-0 text-primary" />}
+      {src ? (
+        <Image
+          src={src}
+          alt={title || 'Logo'}
+          width={32}
+          height={32}
+          unoptimized={src.startsWith('http') || /\.svg(?:$|\?)/i.test(src)}
+          className={cn('mb-3 size-8 shrink-0 object-contain', shouldInvert && 'dark:invert')}
+        />
+      ) : (
+        icon && <Icon name={icon} className="mb-3 size-5 shrink-0 text-primary" />
+      )}
 
       {title && (
         <p className="flex items-center gap-1 font-semibold text-highlighted">
@@ -40,19 +55,11 @@ export function Card({ children, title, icon, to, target, className }: CardProps
     className,
   )
 
-  if (to) {
-    return (
-      <Link
-        href={to}
-        {...(target ? { target } : external ? { target: '_blank', rel: 'noreferrer' } : {})}
-        className={classes}
-      >
-        {body}
-      </Link>
-    )
-  }
-
-  return <div className={classes}>{body}</div>
+  return (
+    <LinkedBox href={to} target={target} label={title} className={classes}>
+      {body}
+    </LinkedBox>
+  )
 }
 
 export type CardGroupProps = Readonly<{

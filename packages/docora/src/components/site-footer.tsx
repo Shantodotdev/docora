@@ -1,6 +1,7 @@
 'use client'
 
 import { ArrowUpRight } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 
 import { useDocsConfig } from '../config/context'
@@ -30,18 +31,22 @@ function Brand() {
   return (
     <Link href="/" className="inline-flex items-center gap-2 transition-opacity hover:opacity-70">
       {logo?.light && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
+        <Image
           src={logo.light}
-          alt={logo.alt ?? title}
+          alt={logo.alt || title}
+          width={24}
+          height={24}
+          unoptimized={/\.svg(?:$|\?)/i.test(logo.light)}
           className={cn('h-6 w-auto', logo.dark && 'dark:hidden', logo.className)}
         />
       )}
       {logo?.dark && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
+        <Image
           src={logo.dark}
-          alt={logo.alt ?? title}
+          alt={logo.alt || title}
+          width={24}
+          height={24}
+          unoptimized={/\.svg(?:$|\?)/i.test(logo.dark)}
           className={cn('hidden h-6 w-auto dark:block', logo.className)}
         />
       )}
@@ -104,7 +109,7 @@ export function SiteFooter({ className }: Readonly<{ className?: string }>) {
         </div>
 
         <div className="mt-10 flex flex-col items-center gap-2 border-t border-border pt-6 text-xs text-dimmed sm:flex-row sm:justify-between">
-          <p>
+          <p suppressHydrationWarning>
             © {year} {config.site.name}. Inspired by{' '}
             <Link
               href="https://docus.dev"

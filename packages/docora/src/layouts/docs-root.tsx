@@ -15,30 +15,14 @@ import { cn } from '../utils/cn'
 
 export type DocsRootProps = Readonly<{
   children: ReactNode
-  /** Site configuration, usually the default export of `docs.config.ts`. */
   config?: DocsConfig
-  /**
-   * Sidebar tree, normally built from the content directory. Overrides
-   * `config.navigation` when given.
-   */
   navigation?: NavItem[]
-  /** Active locale. Sets `<html lang>` and picks the interface strings. */
   locale?: string
-  /**
-   * Whether the AI assistant can run. Computed on the server with
-   * `isAssistantEnabled()`, so the credential never reaches the browser.
-   */
   assistantEnabled?: boolean
   className?: string
   bodyClassName?: string
 }>
 
-/**
- * The `<html>` / `<body>` shell for a docs site.
- *
- * Mounts the colour-mode and configuration providers, so everything the theme
- * renders below can read the site config.
- */
 export function DocsRoot({
   children,
   config = fallbackDocsConfig,

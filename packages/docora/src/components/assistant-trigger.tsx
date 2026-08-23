@@ -5,7 +5,6 @@ import { Sparkles } from 'lucide-react'
 import { useAssistant } from '../assistant/context'
 import { cn } from '../utils/cn'
 
-/** Floating button that opens the assistant. Absent when it is not configured. */
 export function AssistantTrigger({ className }: Readonly<{ className?: string }>) {
   const { enabled, setOpen } = useAssistant()
 
@@ -26,10 +25,6 @@ export function AssistantTrigger({ className }: Readonly<{ className?: string }>
   )
 }
 
-/**
- * Asks the assistant about the page being read. Rendered under the table of
- * contents.
- */
 export function ExplainWithAi({ className }: Readonly<{ className?: string }>) {
   const { enabled, ask } = useAssistant()
 

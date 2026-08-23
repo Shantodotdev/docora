@@ -47,11 +47,6 @@ import {
 } from 'lucide-react'
 import { DynamicIcon, type IconName } from 'lucide-react/dynamic'
 
-/**
- * Icons common enough in documentation to be worth bundling — these render on
- * the server with no pop-in. Anything else falls back to lucide's lazy loader,
- * so any icon name still works.
- */
 const BUNDLED_ICONS: Record<string, LucideIcon> = {
   blocks: Blocks,
   'book-open': BookOpen,
@@ -97,11 +92,6 @@ const BUNDLED_ICONS: Record<string, LucideIcon> = {
   zap: Zap,
 }
 
-/**
- * Accepts both plain lucide names (`rocket`) and Iconify-style names
- * (`i-lucide-rocket`). Collections other than lucide are not bundled, so they
- * fall back to a generic mark rather than breaking the page.
- */
 export function normalizeIconName(name: string): string | undefined {
   if (!name) return undefined
   if (!name.startsWith('i-')) return name
@@ -113,7 +103,6 @@ export function normalizeIconName(name: string): string | undefined {
 }
 
 export type IconProps = Readonly<{
-  /** A lucide name (`folder-tree`) or Iconify name (`i-lucide-folder-tree`). */
   name: string
   className?: string
 }>

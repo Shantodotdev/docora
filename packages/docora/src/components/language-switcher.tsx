@@ -7,8 +7,8 @@ import { Check, Globe } from 'lucide-react'
 import { useLocale, useMessages } from '../i18n/context'
 import { pathForLocale } from '../i18n/paths'
 import { cn } from '../utils/cn'
+import { startRouteProgress } from './route-progress-target'
 
-/** Switches locale while staying on the equivalent page. */
 export function LanguageSwitcher({ className }: Readonly<{ className?: string }>) {
   const { locale, locales, i18n } = useLocale()
   const messages = useMessages()
@@ -41,7 +41,12 @@ export function LanguageSwitcher({ className }: Readonly<{ className?: string }>
           {locales.map(entry => (
             <DropdownMenu.Item
               key={entry.code}
-              onSelect={() => router.push(pathForLocale(pathname, entry.code, i18n))}
+              onSelect={() => {
+                if (entry.code === locale) return
+                // No anchor is clicked here, so the indicator has to be told by hand.
+                startRouteProgress()
+                router.push(pathForLocale(pathname, entry.code, i18n))
+              }}
               className={cn(
                 'flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors',
                 entry.code === locale

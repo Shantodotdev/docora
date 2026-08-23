@@ -16,16 +16,13 @@ import { circuitRailStyle, TOC_LINK_HEIGHT_REM } from './toc-rail'
 
 export type TableOfContentsProps = Readonly<{
   items: TocEntry[]
-  /** Page path relative to the content directory, for the edit link. */
   relativePath?: string
-  /** Page title, used to pre-fill a reported issue. */
   title?: string
   className?: string
 }>
 
 interface FlatLink {
   id: string
-  /** Nesting level in the rendered list, not the heading depth. */
   level: number
 }
 

@@ -6,9 +6,7 @@ interface AssistantContextValue {
   enabled: boolean
   open: boolean
   setOpen: (open: boolean) => void
-  /** Opens the panel and sends a question straight away. */
   ask: (question: string) => void
-  /** Question queued by `ask`, consumed by the panel once it mounts. */
   pending?: string
   clearPending: () => void
 }

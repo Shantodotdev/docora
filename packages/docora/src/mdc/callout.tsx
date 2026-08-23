@@ -1,7 +1,7 @@
-import Link from 'next/link'
 import type { ReactNode } from 'react'
 
 import { Icon } from '../components/icon'
+import { LinkedBox } from '../components/linked-box'
 import { cn } from '../utils/cn'
 
 export type CalloutColor = 'neutral' | 'info' | 'success' | 'warning' | 'error'
@@ -47,21 +47,15 @@ export function Callout({
     className,
   )
 
-  if (to) {
-    const external = to.startsWith('http')
-
-    return (
-      <Link
-        href={to}
-        {...(target ? { target } : external ? { target: '_blank', rel: 'noreferrer' } : {})}
-        className={cn(classes, 'transition-colors hover:border-(--callout-accent)')}
-      >
-        {body}
-      </Link>
-    )
-  }
-
-  return <div className={classes}>{body}</div>
+  return (
+    <LinkedBox
+      href={to}
+      target={target}
+      className={cn(to && 'transition-colors hover:border-(--callout-accent)', classes)}
+    >
+      {body}
+    </LinkedBox>
+  )
 }
 
 const shortcut = (color: CalloutColor, icon: string) =>

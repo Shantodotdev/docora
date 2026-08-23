@@ -1,6 +1,5 @@
 import { defineDocsConfig } from 'docora'
 
-/** Minimal config — the playground exists to exercise the theme, not to be a site. */
 export default defineDocsConfig({
   site: {
     name: 'Playground',

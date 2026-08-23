@@ -1,8 +1,10 @@
 import { ArrowRight } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 import type { ReactNode } from 'react'
 
 import { Icon } from '../components/icon'
+import { LinkedBox } from '../components/linked-box'
 import { cn } from '../utils/cn'
 
 /* -------------------------------------------------------------------------- */
@@ -196,10 +198,12 @@ export function Logo({ children, label, icon, src, invert, className }: LogoProp
   return (
     <span className={cn('inline-flex items-center gap-2.5 font-medium', className)}>
       {src ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
+        <Image
           src={src}
-          alt=""
+          alt={label || (typeof children === 'string' ? children : 'Logo')}
+          width={32}
+          height={32}
+          unoptimized={src.startsWith('http') || /\.svg(?:$|\?)/i.test(src)}
           className={cn('size-8 shrink-0 object-contain', shouldInvert && 'dark:invert')}
         />
       ) : (
@@ -314,15 +318,11 @@ export function Feature({ children, title, icon, to, className }: FeatureProps) 
     className,
   )
 
-  if (to) {
-    return (
-      <Link href={to} className={classes}>
-        {body}
-      </Link>
-    )
-  }
-
-  return <div className={classes}>{body}</div>
+  return (
+    <LinkedBox href={to} label={title} className={classes}>
+      {body}
+    </LinkedBox>
+  )
 }
 
 export type FeatureGridProps = Readonly<{

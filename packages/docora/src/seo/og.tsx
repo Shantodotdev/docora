@@ -4,24 +4,6 @@ import type { DocsConfig } from '../config/types'
 
 export const OG_SIZE = { width: 1200, height: 630 }
 
-/**
- * Open Graph image route.
- *
- * ```ts
- * // app/og/route.tsx
- * import { createOgRoute } from 'docora'
- * import docsConfig from '../../docs.config'
- *
- * export const { GET } = createOgRoute(docsConfig)
- * ```
- *
- * Title and description come from the query string, so one route serves every
- * page and Next can prerender the results.
- *
- * The site's logo is drawn on the card when `header.logo` is set; relative
- * paths are resolved against the incoming request, so no absolute URL has to
- * be configured for this to work.
- */
 export function createOgRoute(config: DocsConfig, options: { logo?: string } = {}) {
   return {
     async GET(request: Request) {
@@ -53,7 +35,7 @@ export function createOgRoute(config: DocsConfig, options: { logo?: string } = {
           <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
             {logo ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={logo} width={64} height={64} alt="" />
+              <img src={logo} width={64} height={64} alt={config.site.name} />
             ) : (
               <div
                 style={{ width: 14, height: 14, borderRadius: 999, backgroundColor: '#34d399' }}

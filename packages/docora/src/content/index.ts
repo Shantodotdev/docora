@@ -9,41 +9,21 @@ import { findDirectory, flattenPages, readContentTree, type ContentDirectory } f
 import type { ContentPage, PageSurround } from './types'
 
 export interface DocsSourceOptions {
-  /** Absolute path to the content directory. */
   contentDir: string
-  /**
-   * Directory whose children make up the sidebar, relative to the content
-   * root. Defaults to `docs` when that folder exists: a landing page at `/`
-   * and documentation under `/docs`.
-   */
   navigationRoot?: string
-  /**
-   * Enables the `content/{locale}/**` layout. Each locale is a top-level
-   * folder and its own documentation tree.
-   */
   i18n?: I18nConfig
 }
 
 export interface DocsSource {
   getPage(slug?: string[]): Promise<ContentPage | undefined>
   getPages(): Promise<ContentPage[]>
-  /** Sidebar for a locale, or the whole site when i18n is off. */
   getNavigation(locale?: string): Promise<NavItem[]>
   getSurround(path: string): Promise<PageSurround>
-  /** Sidebar section heading the page sits under, shown above the page title. */
   getSection(path: string): Promise<string | undefined>
-  /** Every route, shaped for `generateStaticParams`. */
   getStaticParams(): Promise<{ slug: string[] }[]>
-  /** Locales this document exists in, as `code -> path`, for hreflang. */
   getAlternates(path: string): Promise<Record<string, string>>
 }
 
-/**
- * Reads a content directory and answers the questions the routes ask of it.
- *
- * The tree is re-read on every call in development so that adding a file shows
- * up on refresh, and cached in production where the content cannot change.
- */
 export function createDocsSource({
   contentDir,
   navigationRoot,
@@ -58,13 +38,6 @@ export function createDocsSource({
     return cached
   }
 
-  /**
-   * The directory whose children form the sidebar.
-   *
-   * With i18n on, that is the locale folder; inside it — like the
-   * single-language case — a `docs/` subfolder wins if present, which keeps
-   * `/{locale}` free for a landing page.
-   */
   function navigationDirectory(root: ContentDirectory, locale?: string): ContentDirectory {
     let base = root
 
@@ -126,7 +99,6 @@ export function createDocsSource({
   }
 }
 
-/** Convenience for the common case: a `content` directory beside `package.json`. */
 export function defaultContentDir(): string {
   return path.join(process.cwd(), 'content')
 }

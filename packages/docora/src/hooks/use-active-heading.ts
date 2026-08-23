@@ -2,13 +2,6 @@
 
 import { useEffect, useState } from 'react'
 
-/**
- * Tracks every heading currently on screen, in document order.
- *
- * A plain viewport observer with no margin, and when nothing is in view —
- * mid-way through a long section — the previous set is kept so the highlight
- * never blinks out.
- */
 export function useActiveHeadings(ids: string[]): string[] {
   const [activeIds, setActiveIds] = useState<string[]>([])
   const key = ids.join(',')

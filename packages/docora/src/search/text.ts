@@ -1,9 +1,3 @@
-/**
- * Reduces a markdown/MDC document to searchable prose.
- *
- * Search should match what a reader sees, so fences, component markers and
- * link syntax are stripped rather than indexed.
- */
 export function toSearchableText(markdown: string): string {
   return markdown
     .replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, '')
@@ -24,7 +18,6 @@ export function toSearchableText(markdown: string): string {
     .trim()
 }
 
-/** Headings, so results can deep-link to the right section. */
 export function extractHeadings(markdown: string): { text: string; depth: number }[] {
   const body = markdown
     .replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, '')

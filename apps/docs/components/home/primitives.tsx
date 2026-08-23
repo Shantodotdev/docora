@@ -2,7 +2,6 @@ import { Icon, cn } from 'docora'
 import Link from 'next/link'
 import type { ReactNode } from 'react'
 
-/** Shared page gutter. Sections stay full-bleed; only their content is bounded. */
 export function Container({
   children,
   className,
@@ -10,7 +9,6 @@ export function Container({
   return <div className={cn('mx-auto w-full max-w-7xl px-4 sm:px-6', className)}>{children}</div>
 }
 
-/** Small pill above a section title. */
 export function Eyebrow({
   children,
   icon,
@@ -43,10 +41,6 @@ export type ButtonProps = Readonly<{
   className?: string
 }>
 
-/**
- * The only button on the marketing page. Every variant is a pill — the site
- * rounds its controls fully.
- */
 export function Button({
   children,
   href,
@@ -128,7 +122,6 @@ export function SectionHeader({
 export type SectionProps = Readonly<{
   children?: ReactNode
   id?: string
-  /** Tints the full-bleed band behind the section. */
   tone?: 'default' | 'muted'
   className?: string
 }>
@@ -148,7 +141,6 @@ export function Section({ children, id, tone = 'default', className }: SectionPr
   )
 }
 
-/** A soft grid + primary glow used behind the hero and closing call to action. */
 export function GridBackdrop({
   className,
   fade = 'radial',

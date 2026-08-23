@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import {
   Children,
   isValidElement,
@@ -9,6 +8,8 @@ import {
   type ComponentProps,
   type ReactNode,
 } from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { visit } from 'unist-util-visit'
@@ -66,23 +67,33 @@ function textOf(node: ReactNode): string {
   return ''
 }
 
-function ChatLink({ href = '', className, ...props }: ComponentProps<'a'>) {
+function imageAlt(alt: string | undefined, src: string) {
+  const trimmed = alt?.trim()
+  if (trimmed) return trimmed
+  const name = src.split(/[\\/]/).pop()?.split('?')[0]?.replace(/\.[^.]+$/, '') ?? ''
+  return name.replace(/[-_]+/g, ' ').trim() || 'Assistant image'
+}
+
+function ChatLink({ href = '', className, children, title }: ComponentProps<'a'>) {
   const classes = cn(
     'font-medium text-primary underline decoration-primary/40 underline-offset-4 transition-colors hover:decoration-primary',
     className,
   )
 
-  if (href.startsWith('/')) {
-    return <Link href={href} className={classes} {...props} />
-  }
+  if (!href) return <span className={classes}>{children}</span>
+
+  const external = href.startsWith('http')
 
   return (
-    <a
+    <Link
       href={href}
+      title={title}
       className={classes}
-      {...(href.startsWith('http') ? { target: '_blank', rel: 'noreferrer' } : {})}
-      {...props}
-    />
+      prefetch={href.startsWith('#') ? false : undefined}
+      {...(external ? { target: '_blank', rel: 'noreferrer' } : {})}
+    >
+      {children}
+    </Link>
   )
 }
 
@@ -180,6 +191,20 @@ const markdownComponents = {
     <em className={cn('italic', className)} {...props} />
   ),
   a: ChatLink,
+  img: ({ src, alt, className }: ComponentProps<'img'>) => {
+    if (typeof src !== 'string' || !src) return null
+
+    return (
+      <Image
+        src={src}
+        alt={imageAlt(alt, src)}
+        width={800}
+        height={450}
+        unoptimized={src.startsWith('http') || /\.svg(?:$|\?)/i.test(src)}
+        className={cn('my-2 h-auto max-w-full rounded-md', className)}
+      />
+    )
+  },
   blockquote: ({ className, ...props }: ComponentProps<'blockquote'>) => (
     <blockquote
       className={cn(
@@ -231,10 +256,6 @@ const markdownComponents = {
   },
 }
 
-/**
- * Renders an assistant answer as Markdown — lists, emphasis, links and
- * highlighted fences — compact enough for the chat panel.
- */
 export function AssistantMarkdown({ text }: Readonly<{ text: string }>) {
   return (
     <div className="docs-assistant-md text-sm/6 text-foreground [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">

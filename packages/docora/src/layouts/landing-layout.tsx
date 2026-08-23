@@ -9,12 +9,10 @@ import { cn } from '../utils/cn'
 export type LandingLayoutProps = Readonly<{
   children: ReactNode
   header?: ReactNode
-  /** Replaces the default footer entirely. */
   footer?: ReactNode
   className?: string
 }>
 
-/** Full-width chrome for the home page: header and footer, no asides. */
 export function LandingLayout({ children, header, footer, className }: LandingLayoutProps) {
   return (
     <div className="flex min-h-svh flex-col">

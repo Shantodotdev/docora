@@ -20,7 +20,6 @@ export function useSearch() {
   return useContext(SearchContext)
 }
 
-/** Owns the palette and the ⌘K / Ctrl-K shortcut that opens it. */
 export function SearchProvider({
   children,
   enabled = true,

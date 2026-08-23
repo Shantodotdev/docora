@@ -7,7 +7,6 @@ import { cn } from '../utils/cn'
 import { useMessages } from '../i18n/context'
 import { useSearch } from './search-provider'
 
-/** Opens the search palette. Also reachable with the keyboard shortcut. */
 export function SearchButton({
   className,
   iconOnly = false,

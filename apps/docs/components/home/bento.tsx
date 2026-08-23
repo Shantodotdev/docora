@@ -9,7 +9,6 @@ type CardProps = Readonly<{
   icon: string
   to: string
   children: ReactNode
-  /** The visual that fills the lower half of the tile. */
   visual?: ReactNode
   featured?: boolean
   className?: string

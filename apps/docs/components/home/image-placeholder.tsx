@@ -1,18 +1,12 @@
 import { Icon, cn } from 'docora'
 
 export type ImagePlaceholderProps = Readonly<{
-  /** Shown inside the frame — say what belongs here. */
   label: string
   hint?: string
-  /** Any Tailwind aspect utility; defaults to 16 / 9. */
   ratio?: string
   className?: string
 }>
 
-/**
- * A themed stand-in for artwork that has not been produced yet. Swap the whole
- * component for an `<Image />` once the real asset exists.
- */
 export function ImagePlaceholder({
   label,
   hint,

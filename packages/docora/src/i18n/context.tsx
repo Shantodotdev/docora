@@ -30,13 +30,11 @@ export function I18nProvider({
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>
 }
 
-/** The active locale and its configuration. */
 export function useLocale() {
   const { locale, i18n } = useContext(I18nContext)
   return { locale, i18n, locales: i18n?.locales ?? [] }
 }
 
-/** The theme's own strings for the active locale. */
 export function useMessages(): Messages {
   return useContext(I18nContext).messages
 }

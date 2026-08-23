@@ -11,6 +11,7 @@ import { headingSlug, searchDocuments, type SearchResult } from '../search/match
 import type { SearchIndex } from '../search/types'
 import { cn } from '../utils/cn'
 import { Icon } from './icon'
+import { startRouteProgress } from './route-progress-target'
 
 export type SearchDialogProps = Readonly<{
   open: boolean
@@ -167,6 +168,8 @@ export function SearchDialog({ open, onOpenChange, endpoint = '/api/search' }: S
   const go = useCallback(
     (href: string) => {
       close()
+      // No anchor is clicked here, so the indicator has to be told by hand.
+      startRouteProgress()
       router.push(href)
     },
     [close, router],

@@ -2,9 +2,7 @@ import type { SearchDocument } from './types'
 
 export interface SearchResult {
   document: SearchDocument
-  /** The heading the match sits under, when the body matched. */
   heading?: { text: string; depth: number }
-  /** Surrounding text with the match in it. */
   excerpt?: string
   score: number
 }
@@ -31,13 +29,6 @@ function excerptAround(content: string, index: number, query: string): string {
   return `${start > 0 ? '…' : ''}${slice}${end < content.length ? '…' : ''}`
 }
 
-/**
- * Ranks documents against a query.
- *
- * Every term has to appear somewhere in the document, so "config theme" only
- * matches pages containing both. Where a term appears decides the weight:
- * a title hit outranks a body hit.
- */
 export function searchDocuments(
   documents: SearchDocument[],
   query: string,
@@ -103,7 +94,6 @@ export function searchDocuments(
     .slice(0, limit)
 }
 
-/** Turns a heading into the anchor `rehype-slug` generated for it. */
 export function headingSlug(text: string): string {
   return text
     .toLowerCase()

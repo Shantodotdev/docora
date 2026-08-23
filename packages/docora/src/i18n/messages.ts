@@ -1,6 +1,5 @@
 import type { I18nConfig, Messages } from './types'
 
-/** The theme's own strings. Any locale falls back to these. */
 export const defaultMessages: Messages = {
   searchButton: 'Search...',
   searchPlaceholder: 'Search documentation...',
@@ -27,7 +26,6 @@ export const defaultMessages: Messages = {
   documentation: 'Documentation',
 }
 
-/** Bundled translations. Locales beyond these come from `i18n.messages`. */
 export const bundledMessages: Record<string, Partial<Messages>> = {
   fr: {
     searchButton: 'Rechercher...',
@@ -81,11 +79,6 @@ export const bundledMessages: Record<string, Partial<Messages>> = {
   },
 }
 
-/**
- * Strings for one locale: the theme's defaults, then any bundled translation,
- * then the site's own overrides. A missing key falls back rather than showing
- * an empty label.
- */
 export function resolveMessages(locale?: string, i18n?: I18nConfig): Messages {
   if (!locale) return defaultMessages
 

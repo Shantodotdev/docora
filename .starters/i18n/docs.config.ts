@@ -17,7 +17,7 @@ export default defineDocsConfig({
   },
 
   header: {
-    links: [{ label: 'Docs', href: '/en/docs/getting-started/introduction' }],
+    links: [],
   },
 
   socials: {
@@ -38,9 +38,7 @@ export default defineDocsConfig({
       },
       {
         title: 'Resources',
-        links: [
-          { label: 'llms.txt', href: '/llms.txt' },
-        ],
+        links: [{ label: 'llms.txt', href: '/llms.txt' }],
       },
     ],
   },

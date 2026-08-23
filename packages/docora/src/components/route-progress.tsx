@@ -3,42 +3,37 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { usePathname } from 'next/navigation'
 
-import { startsNavigation } from './route-progress-target'
+import { cn } from '../utils/cn'
+import { onRouteProgressStart, startsNavigation } from './route-progress-target'
 
-/** Duration, throttle and hide timings for the bar. */
 const DURATION = 2000
 const THROTTLE = 200
 const HIDE_DELAY = 500
 const RESET_DELAY = 400
-/** Give up and complete the bar if a navigation never lands. */
 const SAFETY_TIMEOUT = DURATION * 3
+/** Keeps the first-load bar on screen long enough to read as progress. */
+const BOOT_MIN_VISIBLE = 400
 
-/** Fast at first, then asymptotic. */
 function estimatedProgress(elapsed: number): number {
   const completion = (elapsed / DURATION) * 100
   return (2 / Math.PI) * 100 * Math.atan(completion / 50)
 }
 
 export type RouteProgressProps = Readonly<{
-  /** Any CSS colour. Defaults to the theme's primary. */
   color?: string
-  /** Bar thickness in pixels. */
   height?: number
 }>
 
-/**
- * A progress bar across the top of the page during client-side navigation.
- *
- * The App Router has no router events, so this starts on a click that will
- * navigate and completes when the pathname actually changes.
- */
 export function RouteProgress({ color, height = 3 }: RouteProgressProps) {
   const pathname = usePathname()
   const [progress, setProgress] = useState(0)
-  const [visible, setVisible] = useState(false)
+  // The first render — server and client alike — is the cold-load bar, which
+  // CSS animates before React is interactive. See `booting` below.
+  const [visible, setVisible] = useState(true)
+  const [booting, setBooting] = useState(true)
 
+  const bar = useRef<HTMLDivElement>(null)
   const running = useRef(false)
-  const finishRef = useRef<() => void>(undefined)
   const pathnameRef = useRef(pathname)
   const timers = useRef<{
     raf?: number
@@ -54,6 +49,16 @@ export function RouteProgress({ color, height = 3 }: RouteProgressProps) {
     for (const id of [throttle, hide, reset, safety]) if (id) clearTimeout(id)
     timers.current = {}
   }, [])
+
+  const finish = useCallback(() => {
+    running.current = false
+    clearTimers()
+    setProgress(100)
+    timers.current.hide = window.setTimeout(() => {
+      setVisible(false)
+      timers.current.reset = window.setTimeout(() => setProgress(0), RESET_DELAY)
+    }, HIDE_DELAY)
+  }, [clearTimers])
 
   const start = useCallback(() => {
     if (running.current) return
@@ -75,26 +80,44 @@ export function RouteProgress({ color, height = 3 }: RouteProgressProps) {
       tick()
     }, THROTTLE)
 
-    timers.current.safety = window.setTimeout(() => finish(), SAFETY_TIMEOUT)
+    timers.current.safety = window.setTimeout(finish, SAFETY_TIMEOUT)
+  }, [clearTimers, finish])
 
-    function finish() {
-      running.current = false
-      clearTimers()
-      setProgress(100)
-      timers.current.hide = window.setTimeout(() => {
-        setVisible(false)
-        timers.current.reset = window.setTimeout(() => setProgress(0), RESET_DELAY)
-      }, HIDE_DELAY)
+  // Cold load: the bar ships in the HTML and CSS advances it while the app
+  // boots. Hydration is the "done" signal — freeze the bar where CSS got to,
+  // then run it out to 100% so the handoff is a single continuous animation.
+  useEffect(() => {
+    const track = bar.current?.parentElement
+    const trackWidth = track?.getBoundingClientRect().width ?? 0
+
+    if (bar.current && trackWidth > 0) {
+      setProgress((bar.current.getBoundingClientRect().width / trackWidth) * 100)
     }
 
-    finishRef.current = finish
-  }, [clearTimers])
+    setBooting(false)
+
+    let raf = 0
+    const remaining = Math.max(0, BOOT_MIN_VISIBLE - performance.now())
+    const timer = window.setTimeout(() => {
+      // Let the frozen width paint first, or the run-out to 100% has nothing
+      // to transition from and snaps instead.
+      raf = requestAnimationFrame(() => {
+        // A navigation that started before hydration owns the bar instead.
+        if (!running.current) finish()
+      })
+    }, remaining)
+
+    return () => {
+      clearTimeout(timer)
+      if (raf) cancelAnimationFrame(raf)
+    }
+  }, [finish])
 
   useEffect(() => {
     if (pathnameRef.current === pathname) return
     pathnameRef.current = pathname
-    if (running.current) finishRef.current?.()
-  }, [pathname])
+    if (running.current) finish()
+  }, [pathname, finish])
 
   useEffect(() => {
     function onClick(event: MouseEvent) {
@@ -121,10 +144,12 @@ export function RouteProgress({ color, height = 3 }: RouteProgressProps) {
 
     document.addEventListener('click', onClick)
     window.addEventListener('popstate', onPopState)
+    const unsubscribe = onRouteProgressStart(start)
 
     return () => {
       document.removeEventListener('click', onClick)
       window.removeEventListener('popstate', onPopState)
+      unsubscribe()
       clearTimers()
     }
   }, [start, clearTimers])
@@ -137,9 +162,12 @@ export function RouteProgress({ color, height = 3 }: RouteProgressProps) {
       data-route-progress={visible ? 'loading' : 'idle'}
     >
       <div
-        className="h-full w-0"
+        ref={bar}
+        className={cn('h-full w-0', booting && 'docs-route-progress-boot')}
         style={{
-          width: `${progress}%`,
+          // While booting the width belongs to the CSS animation, which runs
+          // without React so it survives a page that has not hydrated yet.
+          ...(booting ? null : { width: `${progress}%` }),
           background: color ?? 'var(--primary)',
           opacity: visible ? 1 : 0,
           transition: 'width 0.1s, opacity 0.4s',

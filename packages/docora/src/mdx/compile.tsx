@@ -16,7 +16,6 @@ import { splitFrontmatter, type Frontmatter } from './frontmatter'
 import { rehypeCollectToc, type TocEntry } from './toc'
 
 export interface CompileMdxOptions {
-  /** Extra components made available to the document, merged over the theme defaults. */
   components?: MDXComponents
   remarkPlugins?: EvaluateOptions['remarkPlugins']
   rehypePlugins?: EvaluateOptions['rehypePlugins']
@@ -25,17 +24,9 @@ export interface CompileMdxOptions {
 export interface CompiledMdx<F extends Frontmatter = Frontmatter> {
   content: ReactElement
   frontmatter: F
-  /** Headings found in the document, in source order. */
   toc: TocEntry[]
 }
 
-/**
- * Compile an MDX source string on the server.
- *
- * Content is evaluated at render time instead of going through a bundler
- * loader, so pages can be built from arbitrary files on disk — which is what
- * the file-based content pipeline needs.
- */
 export async function compileMdx<F extends Frontmatter = Frontmatter>(
   source: string,
   options: CompileMdxOptions = {},
@@ -65,7 +56,6 @@ export async function compileMdx<F extends Frontmatter = Frontmatter>(
   }
 }
 
-/** Read an `.mdx`/`.md` file from disk and compile it. */
 export async function compileMdxFile<F extends Frontmatter = Frontmatter>(
   filePath: string,
   options?: CompileMdxOptions,

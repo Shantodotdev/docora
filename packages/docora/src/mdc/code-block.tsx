@@ -10,7 +10,6 @@ import { cn } from '../utils/cn'
 export type CodeBlockProps = Readonly<
   HTMLAttributes<HTMLElement> & {
     children?: ReactNode
-    /** Tighter padding for the assistant chat. */
     compact?: boolean
     'data-filename'?: string
     'data-language'?: string

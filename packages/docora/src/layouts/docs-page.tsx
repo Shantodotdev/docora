@@ -4,11 +4,9 @@ export type DocsPageProps = Readonly<{
   children: ReactNode
   title?: string
   description?: string
-  /** Small coloured label above the title, usually the navigation section. */
   section?: string
 }>
 
-/** A single document: optional title block followed by rendered MDX. */
 export function DocsPage({ children, title, description, section }: DocsPageProps) {
   const hasHeader = Boolean(title || description || section)
 

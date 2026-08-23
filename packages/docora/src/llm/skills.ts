@@ -7,7 +7,6 @@ import { parse as parseYaml } from 'yaml'
 export interface SkillEntry {
   name: string
   description: string
-  /** Files inside the skill folder, relative to it. */
   files: string[]
 }
 
@@ -15,7 +14,6 @@ const SKILL_NAME = /^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/
 const MAX_NAME_LENGTH = 64
 const ENTRY_FILE = 'SKILL.md'
 
-/** Files inside a skill folder, so a skill can ship references beside SKILL.md. */
 async function listFiles(dir: string, prefix = ''): Promise<string[]> {
   const entries = await readdir(dir, { withFileTypes: true })
   const files: string[] = []
@@ -32,12 +30,6 @@ async function listFiles(dir: string, prefix = ''): Promise<string[]> {
   return files.sort()
 }
 
-/**
- * Reads `skills/{name}/SKILL.md` into a catalog.
- *
- * A folder without a valid `SKILL.md` is skipped rather than failing the
- * build — one malformed skill should not take the site down.
- */
 export async function readSkills(skillsDir: string): Promise<SkillEntry[]> {
   if (!existsSync(skillsDir)) return []
 
@@ -72,14 +64,6 @@ export async function readSkills(skillsDir: string): Promise<SkillEntry[]> {
   return catalog.sort((a, b) => a.name.localeCompare(b.name))
 }
 
-/**
- * `/.well-known/skills/index.json` — the catalog agents discover.
- *
- * ```ts
- * // app/.well-known/skills/index.json/route.ts
- * export const { GET, dynamic } = createSkillsIndexRoute(skillsDir)
- * ```
- */
 export function createSkillsIndexRoute(skillsDir: string) {
   return {
     dynamic: 'force-static' as const,
@@ -92,7 +76,6 @@ export function createSkillsIndexRoute(skillsDir: string) {
   }
 }
 
-/** `/.well-known/skills/{skill}/{file}` — the skill's own files. */
 export function createSkillsFileRoute(skillsDir: string) {
   return {
     dynamic: 'force-static' as const,
@@ -131,7 +114,6 @@ export function createSkillsFileRoute(skillsDir: string) {
   }
 }
 
-/** Convenience for the common case: a `skills` folder at the project root. */
 export function defaultSkillsDir(): string {
   return path.join(process.cwd(), 'skills')
 }

@@ -12,18 +12,13 @@ import { cn } from '../utils/cn'
 
 export type DocsLayoutProps = Readonly<{
   children: ReactNode
-  /** Headings of the current document, from `compileMdx`. */
   toc?: TocEntry[]
-  /** Replaces the default header entirely. */
   header?: ReactNode
-  /** Replaces the default footer entirely. */
   footer?: ReactNode
-  /** The page being rendered, for the edit and issue links. */
   page?: { relativePath?: string; title?: string }
   className?: string
 }>
 
-/** Documentation chrome: header, sidebar, content column, table of contents, footer. */
 export function DocsLayout({
   children,
   toc = [],

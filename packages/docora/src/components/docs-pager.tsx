@@ -7,7 +7,6 @@ import type { PageSurround } from '../content/types'
 import { useMessages } from '../i18n/context'
 import { cn } from '../utils/cn'
 
-/** Previous / next links at the foot of a document. */
 export function DocsPager({
   prev,
   next,

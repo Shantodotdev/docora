@@ -34,25 +34,29 @@ export function Window({
     <div
       className={cn('overflow-hidden rounded-2xl border border-border bg-background', className)}
     >
-      <div className="flex items-center gap-2 border-b border-border bg-muted/60 px-4 py-2.5">
-        <span className="flex gap-1.5" aria-hidden>
+      <div className="flex items-center gap-2 border-b border-border bg-muted/60 px-3 py-2.5 sm:px-4">
+        <span className="flex shrink-0 gap-1.5" aria-hidden>
           <span className="size-2.5 rounded-full bg-border-accented" />
           <span className="size-2.5 rounded-full bg-border-accented" />
           <span className="size-2.5 rounded-full bg-border-accented" />
         </span>
 
         {filename && (
-          <span className="ms-2 truncate font-mono text-xs text-muted-foreground">{filename}</span>
+          <span className="ms-1 min-w-0 truncate font-mono text-xs text-muted-foreground sm:ms-2">
+            {filename}
+          </span>
         )}
 
         {tabs && tabs.length > 0 && (
-          <span className="ms-2 flex min-w-0 items-center gap-1">
+          <span className="ms-1 flex min-w-0 items-center gap-1 sm:ms-2">
             {tabs.map((tab, index) => (
               <span
                 key={tab}
                 className={cn(
                   'truncate rounded-full px-2.5 py-1 font-mono text-[0.7rem]',
-                  index === 0 ? 'bg-elevated text-highlighted' : 'text-dimmed',
+                  index === 0
+                    ? 'bg-elevated text-highlighted'
+                    : 'hidden text-dimmed sm:inline-block',
                 )}
               >
                 {tab}
@@ -61,10 +65,12 @@ export function Window({
           </span>
         )}
 
-        {actions && <span className="ms-auto flex items-center gap-1.5">{actions}</span>}
+        {actions && (
+          <span className="ms-auto flex shrink-0 items-center gap-1.5 ps-1">{actions}</span>
+        )}
       </div>
 
-      <div className={cn('min-w-0', bodyClassName)}>{children}</div>
+      <div className={cn('min-w-0 [&>*]:min-w-0', bodyClassName)}>{children}</div>
     </div>
   )
 }

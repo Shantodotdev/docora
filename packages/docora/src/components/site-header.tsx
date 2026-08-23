@@ -4,9 +4,9 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import type { ReactNode } from 'react'
 
-import Image from 'next/image'
 import { useDocsConfig } from '../config/context'
 import { cn } from '../utils/cn'
+import { BrandMark } from './brand'
 import { LanguageSwitcher } from './language-switcher'
 import { MobileNav } from './mobile-nav'
 import { SearchButton } from './search-button'
@@ -22,29 +22,11 @@ export type SiteHeaderProps = Readonly<{
 
 function Logo() {
   const config = useDocsConfig()
-  const logo = config.header?.logo
   const title = config.header?.title ?? config.site.name
 
   return (
     <Link href="/" className="flex items-center gap-2 transition-opacity hover:opacity-70">
-      {logo?.light && (
-        <Image
-          src={logo.light}
-          alt={logo.alt ?? title}
-          width={24}
-          height={24}
-          className={cn('h-6 w-auto', logo.dark && 'dark:hidden', logo.className)}
-        />
-      )}
-      {logo?.dark && (
-        <Image
-          src={logo.dark}
-          alt={logo.alt ?? title}
-          width={24}
-          height={24}
-          className={cn('hidden h-6 w-auto dark:block', logo.className)}
-        />
-      )}
+      <BrandMark priority />
       <span className="font-semibold tracking-tight">{title}</span>
     </Link>
   )

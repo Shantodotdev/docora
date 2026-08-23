@@ -23,11 +23,6 @@ function pageUrl(config: DocsConfig, path: string): string {
   return config.site.url ? new URL(path, config.site.url).toString() : path
 }
 
-/**
- * The two tools an agent needs to read a documentation site: find the page,
- * then read it. Descriptions spell out when to reach for each, since that is
- * what the model actually plans against.
- */
 export function createMcpTools(source: DocsSource, config: DocsConfig): McpTool[] {
   return [
     {

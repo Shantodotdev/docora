@@ -12,11 +12,6 @@ function absolute(config: DocsConfig, path: string): string {
   return config.site.url ? new URL(path, config.site.url).toString() : path
 }
 
-/**
- * `/llms.txt` — the index an agent reads first.
- *
- * Follows llmstxt.org: an H1 title, a blockquote summary, then link lists.
- */
 export function createLlmsTxtRoute(source: DocsSource, config: DocsConfig) {
   return {
     dynamic: 'force-static' as const,
@@ -63,7 +58,6 @@ export function createLlmsTxtRoute(source: DocsSource, config: DocsConfig) {
   }
 }
 
-/** `/llms-full.txt` — every page's markdown in one file. */
 export function createLlmsFullTxtRoute(source: DocsSource, config: DocsConfig) {
   return {
     dynamic: 'force-static' as const,

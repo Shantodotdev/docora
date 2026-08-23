@@ -13,20 +13,8 @@ import type { DocsSource } from '../content/index'
 import { DEFAULT_ASSISTANT_MODEL, defaultSystemPrompt, isAssistantEnabled } from './config'
 import { createAssistantTools } from './tools'
 
-/** How many tool round-trips the model may take before it must answer. */
 const MAX_STEPS = 6
 
-/**
- * Streaming chat route for the in-page assistant.
- *
- * ```ts
- * // app/api/assistant/route.ts
- * export const { POST } = createAssistantRoute(source, docsConfig)
- * ```
- *
- * Returns 503 when no credential is configured, so a misconfigured deployment
- * fails loudly on the server rather than showing a chat box that never answers.
- */
 export function createAssistantRoute(source: DocsSource, config: DocsConfig) {
   return {
     async POST(request: Request) {

@@ -107,9 +107,33 @@
   --destructive: oklch(70.4% 0.191 22.216); /* red-400 */
 }
 
+/*
+ * The route indicator's cold-load phase. This runs off the server-rendered
+ * markup, so a first visit shows progress while the bundle is still loading —
+ * React takes the bar over once it hydrates.
+ */
+@keyframes docs-route-progress-boot {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 90%;
+  }
+}
+
 @layer base {
   body {
     @apply antialiased;
+  }
+
+  .docs-route-progress-boot {
+    animation: docs-route-progress-boot 8s cubic-bezier(0.1, 0.75, 0.2, 1) forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .docs-route-progress-boot {
+      animation-duration: 0s;
+    }
   }
   /*
    * Pretty Code emits both palettes as `--shiki-light` / `--shiki-dark`.

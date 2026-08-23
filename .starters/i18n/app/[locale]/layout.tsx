@@ -8,10 +8,6 @@ import '../globals.css'
 
 export const metadata: Metadata = createRootMetadata(docsConfig)
 
-/**
- * Every route is locale-prefixed, so this is the app's root layout: it owns
- * `<html>` and `<body>` and knows the locale from the URL.
- */
 export function generateStaticParams() {
   return docsConfig.i18n!.locales.map(locale => ({ locale: locale.code }))
 }

@@ -19,13 +19,13 @@ Security reports follow [SECURITY.md](SECURITY.md) — do not file them as publi
 
 This is a pnpm monorepo:
 
-| Path | Package | Purpose |
-| --- | --- | --- |
-| `packages/docora` | `docora` | Next.js documentation theme |
-| `packages/create-docora` | `create-docora` | Project scaffolding CLI |
-| `apps/docs` | `docs` | Official documentation site |
-| `apps/playground` | `playground` | Internal playground |
-| `.starters/*` | — | Templates copied by the CLI (not workspace packages) |
+| Path                     | Package         | Purpose                                              |
+| ------------------------ | --------------- | ---------------------------------------------------- |
+| `packages/docora`        | `docora`        | Next.js documentation theme                          |
+| `packages/create-docora` | `create-docora` | Project scaffolding CLI                              |
+| `apps/docs`              | `docs`          | Official documentation site                          |
+| `apps/playground`        | `playground`    | Internal playground                                  |
+| `.starters/*`            | —               | Templates copied by the CLI (not workspace packages) |
 
 Starter templates live in `.starters/`. The CLI copies them into `packages/create-docora/templates` at build time. Edit `.starters`, not the generated `templates` folder.
 
@@ -45,15 +45,15 @@ pnpm run dev
 
 `pnpm run dev` starts the documentation site at [http://localhost:3000](http://localhost:3000). Useful scripts:
 
-| Command | What it does |
-| --- | --- |
-| `pnpm run dev` | Run the docs site |
-| `pnpm run playground:dev` | Run the playground |
-| `pnpm run typecheck` | Type-check every package |
-| `pnpm run lint` | Lint the repo |
-| `pnpm run format` | Format with Prettier |
-| `pnpm run verify` | Typecheck, lint, format check, and build |
-| `pnpm run build` | Build the CLI templates and the docs site |
+| Command                   | What it does                              |
+| ------------------------- | ----------------------------------------- |
+| `pnpm run dev`            | Run the docs site                         |
+| `pnpm run playground:dev` | Run the playground                        |
+| `pnpm run typecheck`      | Type-check every package                  |
+| `pnpm run lint`           | Lint the repo                             |
+| `pnpm run format`         | Format with Prettier                      |
+| `pnpm run verify`         | Typecheck, lint, format check, and build  |
+| `pnpm run build`          | Build the CLI templates and the docs site |
 
 ## Pull request process
 

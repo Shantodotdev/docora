@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import type { AnchorHTMLAttributes, HTMLAttributes } from 'react'
 
-import { cn } from '../utils/cn'
+import { Icon } from '../components/icon'
 import {
   Accordion,
   AccordionItem,
@@ -27,14 +27,14 @@ import {
   Hero,
   HeroActions,
   HeroPreview,
+  Kbd,
   Logo,
   LogoCloud,
-  Stat,
-  StatGrid,
-  Kbd,
   MdcSlot,
   Note,
   Section,
+  Stat,
+  StatGrid,
   Steps,
   Tabs,
   TabsItem,
@@ -42,12 +42,17 @@ import {
   Video,
   Warning,
 } from '../mdc/index'
-import { Icon } from '../components/icon'
+import { cn } from '../utils/cn'
 
 function imageAlt(alt: string | undefined, src: string) {
   const trimmed = alt?.trim()
   if (trimmed) return trimmed
-  const name = src.split(/[\\/]/).pop()?.split('?')[0]?.replace(/\.[^.]+$/, '') ?? ''
+  const name =
+    src
+      .split(/[\\/]/)
+      .pop()
+      ?.split('?')[0]
+      ?.replace(/\.[^.]+$/, '') ?? ''
   return name.replace(/[-_]+/g, ' ').trim() || 'Documentation image'
 }
 
@@ -79,11 +84,7 @@ function Anchor({
       className={classes}
       title={title}
       prefetch={href.startsWith('#') ? false : undefined}
-      {...(target
-        ? { target, rel }
-        : external
-          ? { target: '_blank', rel: 'noreferrer' }
-          : {})}
+      {...(target ? { target, rel } : external ? { target: '_blank', rel: 'noreferrer' } : {})}
     >
       {children}
     </Link>
@@ -178,8 +179,6 @@ export const defaultMdxComponents: MDXComponents = {
 }
 
 export const mdxShortcodes: MDXComponents = {
-  // MDC lowercases component names, so both spellings are registered: content
-  // can use `::card-group` or JSX `<CardGroup>`.
   Callout,
   callout: Callout,
   Note,
@@ -228,7 +227,6 @@ export const mdxShortcodes: MDXComponents = {
   video: Video,
   'mdc-slot': MdcSlot,
 
-  // Landing-page building blocks.
   Hero,
   hero: Hero,
   HeroActions,

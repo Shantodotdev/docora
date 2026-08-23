@@ -4,10 +4,10 @@
 
 Security fixes are applied to the latest published versions of `docora` and `create-docora` on npm.
 
-| Package | Supported |
-| --- | --- |
-| `docora` (latest) | Yes |
-| `create-docora` (latest) | Yes |
+| Package                  | Supported   |
+| ------------------------ | ----------- |
+| `docora` (latest)        | Yes         |
+| `create-docora` (latest) | Yes         |
 | Older published versions | Best effort |
 
 ## Reporting a vulnerability

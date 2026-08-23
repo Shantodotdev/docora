@@ -104,33 +104,45 @@ export function SearchDialog({ open, onOpenChange, endpoint = '/api/search' }: S
   const { theme, setTheme } = useTheme()
   const [query, setQuery] = useState('')
   const [index, setIndex] = useState<SearchIndex>()
-  const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
+  const [failed, setFailed] = useState(false)
   const [active, setActive] = useState(0)
+  const [wasOpen, setWasOpen] = useState(open)
+  const requested = useRef(false)
   const listRef = useRef<HTMLDivElement>(null)
 
   const showTheme = !config.colorMode?.forced
   const trimmed = query.trim()
 
-  // Fetch once, the first time the dialog is opened.
-  useEffect(() => {
-    if (!open || index || status === 'loading') return
+  if (wasOpen !== open) {
+    setWasOpen(open)
+    if (!open) {
+      setQuery('')
+      setActive(0)
 
-    setStatus('loading')
+      if (failed) setFailed(false)
+    }
+  }
+
+  useEffect(() => {
+    if (!open || requested.current) return
+    requested.current = true
+
     fetch(endpoint)
       .then(response =>
         response.ok ? response.json() : Promise.reject(new Error(String(response.status))),
       )
-      .then((data: SearchIndex) => {
-        setIndex(data)
-        setStatus('idle')
+      .then((data: SearchIndex) => setIndex(data))
+      .catch(() => {
+        requested.current = false
+        setFailed(true)
       })
-      .catch(() => setStatus('error'))
-  }, [open, index, status, endpoint])
+  }, [open, endpoint])
+
+  const status = index ? 'idle' : failed ? 'error' : 'loading'
 
   const results = useMemo(() => {
     if (!index) return []
 
-    // With i18n on, results stay inside the locale being read.
     const documents = i18n
       ? index.documents.filter(document => !document.locale || document.locale === locale)
       : index.documents
@@ -155,20 +167,11 @@ export function SearchDialog({ open, onOpenChange, endpoint = '/api/search' }: S
     return [...groupLinks, ...themeItems]
   }, [groupLinks, results, themeItems, trimmed])
 
-  useEffect(() => {
-    if (!open) setQuery('')
-    setActive(0)
-  }, [open, query])
-
-  const close = useCallback(() => {
-    setQuery('')
-    onOpenChange(false)
-  }, [onOpenChange])
+  const close = useCallback(() => onOpenChange(false), [onOpenChange])
 
   const go = useCallback(
     (href: string) => {
       close()
-      // No anchor is clicked here, so the indicator has to be told by hand.
       startRouteProgress()
       router.push(href)
     },
@@ -204,7 +207,6 @@ export function SearchDialog({ open, onOpenChange, endpoint = '/api/search' }: S
     }
   }
 
-  // Keep the highlighted row in view while arrowing through.
   useEffect(() => {
     listRef.current?.querySelector('[data-active="true"]')?.scrollIntoView({ block: 'nearest' })
   }, [active])
@@ -230,7 +232,10 @@ export function SearchDialog({ open, onOpenChange, endpoint = '/api/search' }: S
             <input
               autoFocus
               value={query}
-              onChange={event => setQuery(event.target.value)}
+              onChange={event => {
+                setQuery(event.target.value)
+                setActive(0)
+              }}
               placeholder={messages.searchPlaceholder}
               aria-label={messages.searchPlaceholder}
               className="h-12 w-full bg-transparent text-sm text-foreground placeholder:text-dimmed focus:outline-none"

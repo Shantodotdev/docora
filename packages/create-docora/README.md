@@ -33,13 +33,13 @@ npx create-docora . --no-install --no-git-init
 
 Without a TTY (CI, piped input) there are no prompts. Defaults are:
 
-| Setting | Default |
-| --- | --- |
-| Directory | `my-docs` |
-| Template | `default` |
+| Setting         | Default                        |
+| --------------- | ------------------------------ |
+| Directory       | `my-docs`                      |
+| Template        | `default`                      |
 | Package manager | the invoking manager, or `npm` |
-| Install | yes |
-| Git init | no |
+| Install         | yes                            |
+| Git init        | no                             |
 
 If the target already exists and is not empty, pass `--force` or choose a different directory. `--force` empties the directory in place so you can scaffold into `.` without deleting the working directory itself.
 
@@ -74,10 +74,10 @@ Options:
 
 Starters live in [`.starters`](https://github.com/StaticMania/docora/tree/main/.starters) and are copied into this package at build time.
 
-| Name | Description |
-| --- | --- |
+| Name      | Description                                       |
+| --------- | ------------------------------------------------- |
 | `default` | Single-language docs. Recommended starting point. |
-| `i18n` | Multi-language docs with locale-prefixed routes. |
+| `i18n`    | Multi-language docs with locale-prefixed routes.  |
 
 ```bash
 npx create-docora my-docs -t i18n

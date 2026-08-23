@@ -8,3 +8,9 @@ pnpm-lock.yaml
 next-env.d.ts
 packages/create-docora/templates
 *.svg
+
+# Prettier's markdown parser does not understand MDC, and rewrites it wrongly:
+# it escapes underscores in component attributes (`target="_blank"` becomes
+# `target="\_blank"`) and prefixes block JSX with a semicolon. Pages are authored
+# by hand, so leave them alone.
+**/content/**/*.mdx

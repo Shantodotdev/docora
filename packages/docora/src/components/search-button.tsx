@@ -1,10 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { Search } from 'lucide-react'
 
-import { cn } from '../utils/cn'
+import { useHydrated } from '../hooks/use-hydrated'
 import { useMessages } from '../i18n/context'
+import { cn } from '../utils/cn'
 import { useSearch } from './search-provider'
 
 export function SearchButton({
@@ -16,11 +16,8 @@ export function SearchButton({
 }>) {
   const { setOpen } = useSearch()
   const messages = useMessages()
-  const [modifier, setModifier] = useState('CTRL')
-
-  useEffect(() => {
-    if (navigator.platform.toLowerCase().includes('mac')) setModifier('⌘')
-  }, [])
+  const hydrated = useHydrated()
+  const modifier = hydrated && navigator.platform.toLowerCase().includes('mac') ? '⌘' : 'CTRL'
 
   if (iconOnly) {
     return (

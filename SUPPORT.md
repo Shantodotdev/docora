@@ -8,12 +8,12 @@
 
 ## What belongs where
 
-| Topic | Where to go |
-| --- | --- |
-| Bug in the theme, CLI, or docs site | [Bug report](https://github.com/StaticMania/docora/issues/new?template=bug.yml) |
-| Feature or API idea | [Feature request](https://github.com/StaticMania/docora/issues/new?template=feature.yml) |
-| Security vulnerability | [SECURITY.md](SECURITY.md) |
-| Community conduct | [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) |
+| Topic                               | Where to go                                                                              |
+| ----------------------------------- | ---------------------------------------------------------------------------------------- |
+| Bug in the theme, CLI, or docs site | [Bug report](https://github.com/StaticMania/docora/issues/new?template=bug.yml)          |
+| Feature or API idea                 | [Feature request](https://github.com/StaticMania/docora/issues/new?template=feature.yml) |
+| Security vulnerability              | [SECURITY.md](SECURITY.md)                                                               |
+| Community conduct                   | [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)                                                 |
 
 Please do not use GitHub issues to report security vulnerabilities.
 

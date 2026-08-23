@@ -1,26 +1,20 @@
 'use client'
-
-import { useEffect, useState } from 'react'
-import { useTheme } from 'next-themes'
 import { Moon, Sun } from 'lucide-react'
-
+import { useTheme } from 'next-themes'
+import { useHydrated } from '../hooks/use-hydrated'
 import { useMessages } from '../i18n/context'
 import { cn } from '../utils/cn'
 
 export function ThemeToggle({ className }: Readonly<{ className?: string }>) {
   const { resolvedTheme, setTheme } = useTheme()
   const messages = useMessages()
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => setMounted(true), [])
+  const mounted = useHydrated()
 
   const isDark = resolvedTheme === 'dark'
 
   return (
     <button
       type="button"
-      // The resolved theme is unknown during SSR, so keep the icon hidden until
-      // the client knows which one to show.
       aria-label={
         mounted ? (isDark ? messages.toggleToLight : messages.toggleToDark) : messages.toggleToDark
       }

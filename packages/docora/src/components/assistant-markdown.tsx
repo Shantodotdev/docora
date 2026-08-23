@@ -70,7 +70,12 @@ function textOf(node: ReactNode): string {
 function imageAlt(alt: string | undefined, src: string) {
   const trimmed = alt?.trim()
   if (trimmed) return trimmed
-  const name = src.split(/[\\/]/).pop()?.split('?')[0]?.replace(/\.[^.]+$/, '') ?? ''
+  const name =
+    src
+      .split(/[\\/]/)
+      .pop()
+      ?.split('?')[0]
+      ?.replace(/\.[^.]+$/, '') ?? ''
   return name.replace(/[-_]+/g, ' ').trim() || 'Assistant image'
 }
 

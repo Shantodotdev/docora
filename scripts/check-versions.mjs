@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const offline = process.argv.includes('--offline') || process.env.SKIP_REGISTRY_CHECK === '1'
+const publishing = process.argv.find(arg => arg.startsWith('--publishing='))?.split('=')[1]
 
 const color = process.env.NO_COLOR === undefined && process.stdout.isTTY
 const paint = (code, text) => (color ? `\u001b[${code}m${text}\u001b[0m` : text)
@@ -141,10 +142,15 @@ if (offline) {
     } else if (found === 'new') {
       row(`npm ${pkg.name}`, `unpublished → ${pkg.version}`, 'ok')
     } else if (found.versions.includes(pkg.version)) {
-      errors.push(
-        `${pkg.name}@${pkg.version} is already on npm — versions are immutable, so bump before publishing`,
-      )
-      row(`npm ${pkg.name}`, `${found.latest} → taken`, 'error')
+      const message = `${pkg.name}@${pkg.version} is already on npm — versions are immutable, so bump before publishing`
+
+      if (publishing === undefined || publishing === pkg.name) {
+        errors.push(message)
+        row(`npm ${pkg.name}`, `${found.latest} → taken`, 'error')
+      } else {
+        warnings.push(`${message} (not the package being published)`)
+        row(`npm ${pkg.name}`, `${found.latest} → published`, 'warn')
+      }
     } else {
       row(`npm ${pkg.name}`, `${found.latest} → ${pkg.version}`, 'ok')
     }

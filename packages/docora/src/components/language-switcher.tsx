@@ -43,7 +43,6 @@ export function LanguageSwitcher({ className }: Readonly<{ className?: string }>
               key={entry.code}
               onSelect={() => {
                 if (entry.code === locale) return
-                // No anchor is clicked here, so the indicator has to be told by hand.
                 startRouteProgress()
                 router.push(pathForLocale(pathname, entry.code, i18n))
               }}

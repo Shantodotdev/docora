@@ -32,8 +32,6 @@ export default async function Page({ params }: PageProps) {
   const page = await source.getPage((await params).slug)
   if (!page) notFound()
 
-  // The home page is a React composition rather than MDX; `content/index.mdx`
-  // still supplies its metadata and feeds search, `llms.txt` and the MCP server.
   if (page.slug.length === 0 && page.frontmatter.layout === 'landing') {
     return (
       <LandingLayout className="max-w-none px-0 py-0 sm:px-0">
@@ -44,7 +42,6 @@ export default async function Page({ params }: PageProps) {
 
   const { content, frontmatter, toc } = await compileMdxFile(page.filePath)
 
-  // A landing page supplies its own hero, so the title block would duplicate it.
   if (frontmatter.layout === 'landing') {
     return (
       <LandingLayout>

@@ -17,7 +17,6 @@ type PageProps = Readonly<{
 }>
 
 export async function generateStaticParams() {
-  // The source returns locale-prefixed slugs; the route splits them in two.
   const params = await source.getStaticParams()
 
   return params
@@ -44,7 +43,6 @@ export default async function Page({ params }: PageProps) {
 
   const { content, frontmatter, toc } = await compileMdxFile(page.filePath)
 
-  // A landing page supplies its own hero, so the title block would duplicate it.
   if (frontmatter.layout === 'landing') {
     return (
       <LandingLayout>

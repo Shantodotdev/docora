@@ -37,7 +37,6 @@ export async function compileMdx<F extends Frontmatter = Frontmatter>(
   const { default: MdxContent } = await evaluate(body, {
     ...runtime,
     development: false,
-    // MDC first: it claims `::name{...}` before MDX reads `{}` as an expression.
     remarkPlugins: [remarkMdc, remarkGfm, ...(options.remarkPlugins ?? [])],
     remarkRehypeOptions: { handlers: mdcHandlers },
     rehypePlugins: [

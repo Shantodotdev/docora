@@ -96,7 +96,6 @@ export function createSkillsFileRoute(skillsDir: string) {
       const skill = skills.find(candidate => candidate.name === skillName)
       const relative = rest.join('/')
 
-      // Only files the catalog knows about, so the route cannot walk the disk.
       if (!skill || !skill.files.includes(relative)) {
         return new Response('Not found', { status: 404 })
       }

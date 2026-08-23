@@ -33,7 +33,6 @@ export default async function Page({ params }: PageProps) {
 
   const { content, frontmatter, toc } = await compileMdxFile(page.filePath)
 
-  // A landing page supplies its own hero, so the title block would duplicate it.
   if (frontmatter.layout === 'landing') {
     return (
       <LandingLayout>

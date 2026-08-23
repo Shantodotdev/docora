@@ -7,10 +7,6 @@ import { Icon } from '../components/icon'
 import { LinkedBox } from '../components/linked-box'
 import { cn } from '../utils/cn'
 
-/* -------------------------------------------------------------------------- */
-/* Hero                                                                       */
-/* -------------------------------------------------------------------------- */
-
 export type HeroProps = Readonly<{
   children?: ReactNode
   title?: string
@@ -163,10 +159,6 @@ export function Cta({ children, label, to = '#', icon, variant = 'primary', clas
   )
 }
 
-/* -------------------------------------------------------------------------- */
-/* Logo cloud and stats                                                       */
-/* -------------------------------------------------------------------------- */
-
 export function LogoCloud({
   children,
   className,
@@ -244,10 +236,6 @@ export function Stat({ children, value, label, className }: StatProps) {
     </div>
   )
 }
-
-/* -------------------------------------------------------------------------- */
-/* Sections and features                                                      */
-/* -------------------------------------------------------------------------- */
 
 export type SectionProps = Readonly<{
   children?: ReactNode

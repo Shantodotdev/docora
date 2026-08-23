@@ -11,7 +11,6 @@ const THROTTLE = 200
 const HIDE_DELAY = 500
 const RESET_DELAY = 400
 const SAFETY_TIMEOUT = DURATION * 3
-/** Keeps the first-load bar on screen long enough to read as progress. */
 const BOOT_MIN_VISIBLE = 400
 
 function estimatedProgress(elapsed: number): number {
@@ -27,8 +26,6 @@ export type RouteProgressProps = Readonly<{
 export function RouteProgress({ color, height = 3 }: RouteProgressProps) {
   const pathname = usePathname()
   const [progress, setProgress] = useState(0)
-  // The first render — server and client alike — is the cold-load bar, which
-  // CSS animates before React is interactive. See `booting` below.
   const [visible, setVisible] = useState(true)
   const [booting, setBooting] = useState(true)
 
@@ -74,7 +71,6 @@ export function RouteProgress({ color, height = 3 }: RouteProgressProps) {
       timers.current.raf = requestAnimationFrame(tick)
     }
 
-    // Hold off briefly so instant navigations never flash the bar.
     timers.current.throttle = window.setTimeout(() => {
       setVisible(true)
       tick()
@@ -83,9 +79,6 @@ export function RouteProgress({ color, height = 3 }: RouteProgressProps) {
     timers.current.safety = window.setTimeout(finish, SAFETY_TIMEOUT)
   }, [clearTimers, finish])
 
-  // Cold load: the bar ships in the HTML and CSS advances it while the app
-  // boots. Hydration is the "done" signal — freeze the bar where CSS got to,
-  // then run it out to 100% so the handoff is a single continuous animation.
   useEffect(() => {
     const track = bar.current?.parentElement
     const trackWidth = track?.getBoundingClientRect().width ?? 0
@@ -99,10 +92,7 @@ export function RouteProgress({ color, height = 3 }: RouteProgressProps) {
     let raf = 0
     const remaining = Math.max(0, BOOT_MIN_VISIBLE - performance.now())
     const timer = window.setTimeout(() => {
-      // Let the frozen width paint first, or the run-out to 100% has nothing
-      // to transition from and snaps instead.
       raf = requestAnimationFrame(() => {
-        // A navigation that started before hydration owns the bar instead.
         if (!running.current) finish()
       })
     }, remaining)
@@ -165,8 +155,6 @@ export function RouteProgress({ color, height = 3 }: RouteProgressProps) {
         ref={bar}
         className={cn('h-full w-0', booting && 'docs-route-progress-boot')}
         style={{
-          // While booting the width belongs to the CSS animation, which runs
-          // without React so it survives a page that has not hydrated yet.
           ...(booting ? null : { width: `${progress}%` }),
           background: color ?? 'var(--primary)',
           opacity: visible ? 1 : 0,

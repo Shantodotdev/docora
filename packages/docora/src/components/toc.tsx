@@ -46,7 +46,6 @@ function TocList({
           <a
             href={`#${node.id}`}
             className={cn(
-              // The 1.75rem row height is what the rail mask is measured against.
               'relative flex items-center rounded-sm py-1 text-sm leading-5',
               activeIds.has(node.id)
                 ? 'text-primary'

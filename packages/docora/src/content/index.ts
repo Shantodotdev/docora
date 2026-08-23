@@ -71,7 +71,6 @@ export function createDocsSource({
     },
 
     async getSurround(currentPath) {
-      // Pager stays inside the locale the reader is already in.
       return findSurround(await getNavigation(localeFromPath(currentPath, i18n)), currentPath)
     },
 

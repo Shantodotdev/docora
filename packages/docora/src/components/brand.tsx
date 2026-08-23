@@ -6,12 +6,10 @@ import { useDocsConfig } from '../config/context'
 import { cn } from '../utils/cn'
 
 export type BrandMarkProps = Readonly<{
-  /** Set on the header instance so the logo is not lazy-loaded above the fold. */
   priority?: boolean
   className?: string
 }>
 
-/** The configured logo image. A dark variant, when set, swaps in with the colour mode. */
 export function BrandMark({ priority, className }: BrandMarkProps) {
   const config = useDocsConfig()
   const logo = config.header?.logo

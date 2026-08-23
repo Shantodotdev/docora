@@ -4,7 +4,6 @@ export default defineDocsConfig({
   site: {
     name: 'My Docs',
     description: 'Documentation built with Docora.',
-    // Set this to enable canonical URLs, hreflang, the sitemap and social images.
     // url: 'https://docs.example.com',
   },
 

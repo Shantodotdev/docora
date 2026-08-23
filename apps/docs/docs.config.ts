@@ -4,8 +4,6 @@ export default defineDocsConfig({
   site: {
     name: 'Docora',
     description: 'Beautiful documentation for Next.js and React.',
-    // Change this to the deployed URL; it drives canonical links, the sitemap
-    // and social images.
     url: 'https://docora.example.com',
     locale: 'en',
   },
@@ -18,13 +16,11 @@ export default defineDocsConfig({
     links: [],
   },
 
-  // Placeholder repository — swap once the project has a public home.
   socials: {
     github: 'https://github.com/StaticMania/docora',
   },
 
   assistant: {
-    // Free-tier Gateway model; Claude Sonnet 5 requires paid credits.
     model: 'google/gemini-2.5-flash',
     suggestions: [
       'How do I add a new page?',
@@ -50,7 +46,6 @@ export default defineDocsConfig({
   github: {
     url: 'https://github.com/StaticMania/docora',
     branch: 'main',
-    // Where this app sits in the repository, so edit links resolve.
     rootDir: 'apps/docs',
   },
 
@@ -69,6 +64,7 @@ export default defineDocsConfig({
       {
         title: 'Resources',
         links: [
+          { label: 'Changelog', href: '/changelog' },
           { label: 'GitHub', href: 'https://github.com/StaticMania/docora' },
           { label: 'Report an issue', href: 'https://github.com/StaticMania/docora/issues' },
           { label: 'llms.txt', href: '/llms.txt' },

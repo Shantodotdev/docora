@@ -15,7 +15,6 @@ export async function buildSearchIndex(
 ): Promise<SearchIndex> {
   const pages = await source.getPages()
 
-  // Section labels differ per locale, so each locale's tree is read separately.
   const navigations = i18n
     ? await Promise.all(i18n.locales.map(locale => source.getNavigation(locale.code)))
     : [await source.getNavigation()]

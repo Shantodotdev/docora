@@ -25,7 +25,6 @@ async function readDirectoryMeta(dir: string): Promise<DirectoryMeta> {
     const raw = await readFile(path.join(dir, DIRECTORY_META_FILE), 'utf8')
     return (parseYaml(raw) ?? {}) as DirectoryMeta
   } catch {
-    // A directory without a `.navigation.yml` is the normal case.
     return {}
   }
 }

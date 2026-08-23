@@ -18,7 +18,6 @@ export function createLlmsTxtRoute(source: DocsSource, config: DocsConfig) {
     async GET() {
       const pages = await source.getPages()
 
-      // Section labels come from the sidebar, and differ per locale.
       const navigations = config.i18n
         ? await Promise.all(config.i18n.locales.map(locale => source.getNavigation(locale.code)))
         : [await source.getNavigation()]

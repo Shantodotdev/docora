@@ -46,7 +46,6 @@ function NavTree({
                 aria-current={isActive ? 'page' : undefined}
                 className={cn(
                   ROW,
-                  // Nested rows carry a 1px marker sitting on the tree rule.
                   nested &&
                     'after:absolute after:-start-1.5 after:inset-y-0.5 after:block after:w-px after:rounded-full after:transition-colors',
                   isActive

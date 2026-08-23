@@ -73,7 +73,6 @@ export function createMcpRoute(
             structuredContent: output,
           })
         } catch (error) {
-          // Tool failures are results, not protocol errors, so the model can react.
           return result(request.id, {
             content: [{ type: 'text', text: (error as Error).message }],
             isError: true,
@@ -116,7 +115,6 @@ export function createMcpRoute(
         responses.push(await handle(entry))
       }
 
-      // A batch of nothing but notifications gets an empty 202, per the spec.
       if (responses.length === 0) return new Response(null, { status: 202 })
 
       return Response.json(Array.isArray(payload) ? responses : responses[0], {

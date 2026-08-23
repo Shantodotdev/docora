@@ -28,7 +28,6 @@ export function createOgRoute(config: DocsConfig, options: { logo?: string } = {
             justifyContent: 'space-between',
             backgroundColor: '#18181b',
             padding: '80px',
-            // A soft wash so the card is not a flat rectangle.
             backgroundImage: 'radial-gradient(circle at 85% 15%, #10b98133, transparent 55%)',
           }}
         >

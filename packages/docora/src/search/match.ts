@@ -20,7 +20,6 @@ function excerptAround(content: string, index: number, query: string): string {
   let start = Math.max(0, index - 40)
   let end = Math.min(content.length, index + query.length + 80)
 
-  // Snap outwards to word boundaries so the excerpt never starts mid-word.
   while (start > 0 && !/\s/.test(content[start - 1]!)) start -= 1
   while (end < content.length && !/\s/.test(content[end]!)) end += 1
 
@@ -70,7 +69,6 @@ export function searchDocuments(
         excerpt ??= excerptAround(document.content, contentIndex, term)
       }
 
-      // Every term must land somewhere, otherwise the document is out.
       if (termScore === 0) {
         score = 0
         break

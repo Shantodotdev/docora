@@ -4,8 +4,12 @@ export default defineDocsConfig({
   site: {
     name: 'Docora',
     description: 'Beautiful documentation for Next.js and React.',
-    url: 'https://docora.example.com',
+    url: 'https://docora-docs.vercel.app',
     locale: 'en',
+  },
+
+  seo: {
+    ogImage: '/docora-og.png',
   },
 
   header: {

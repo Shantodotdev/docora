@@ -2,7 +2,7 @@
 
 Create beautiful docs with Markdown & React components.
 
-[![docora](https://res.cloudinary.com/arif5577/image/upload/v1787149962/Screenshot_2026-08-19_203136_jcafdn.png)](https://github.com/StaticMania/docora)
+[![docora](https://res.cloudinary.com/arif5577/image/upload/v1787668074/DOCORA_g4feuv.png)](https://github.com/StaticMania/docora)
 
 [![npm version](https://img.shields.io/npm/v/docora.svg?style=flat&colorA=020420&colorB=EEEEEE)](https://npmjs.com/package/docora)
 [![npm downloads](https://img.shields.io/npm/dm/docora.svg?style=flat&colorA=020420&colorB=EEEEEE)](https://npm.chart.dev/docora)
@@ -55,7 +55,7 @@ The CLI scaffolds a complete documentation project with:
 - 📄 **LLM-Ready** — Automatic `llms.txt`, `llms-full.txt` and raw Markdown routes
 - 🗺️ **SEO Optimized** — Sitemap, robots.txt, canonicals and OG image generation out of the box
 
-Learn more in the [Docora documentation](https://github.com/StaticMania/docora).
+Learn more in the [Docora documentation](https://docora-docs.vercel.app).
 
 ## 🤖 AI features
 

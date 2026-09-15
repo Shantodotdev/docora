@@ -16,12 +16,17 @@ Every page with its title, path, description and URL. The starting point when
 the exact page is unknown.
 :::
 
+:::field{name="search-docs" type="{ query: string, locale?: string, limit?: number }" required}
+Searches the documentation and returns ranked matching pages with excerpts,
+titles, paths and URLs. Use to find relevant sections before fetching full pages.
+:::
+
 :::field{name="get-page" type="{ path: string }" required}
 The full markdown of one page, plus its metadata.
 :::
 ::
 
-Both are annotated read-only, so a client knows they cannot change anything.
+All are annotated read-only, so a client knows they cannot change anything.
 
 ## Connecting
 

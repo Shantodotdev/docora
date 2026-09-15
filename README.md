@@ -67,7 +67,7 @@ Embed an AI-powered chat in your docs that answers questions, cites sources, and
 
 ### MCP Server
 
-Every Docora site exposes an MCP server at `/mcp` with `list-pages` and `get-page`. Add it to Cursor, VS Code, Claude or any MCP client:
+Every Docora site exposes an MCP server at `/mcp` with `list-pages`, `search-docs` and `get-page`. Add it to Cursor, VS Code, Claude or any MCP client:
 
 ```
 https://your-docs-domain.com/mcp

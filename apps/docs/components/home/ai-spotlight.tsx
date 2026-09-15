@@ -7,7 +7,7 @@ const POINTS = [
   {
     icon: 'server',
     title: 'MCP server, zero config',
-    body: 'list-pages and get-page tools, live at /mcp.',
+    body: 'list-pages, search-docs and get-page tools, live at /mcp.',
   },
   {
     icon: 'file-text',

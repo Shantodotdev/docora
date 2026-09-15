@@ -3,6 +3,8 @@ import { readFile } from 'node:fs/promises'
 import type { DocsConfig } from '../config/types'
 import type { DocsSource } from '../content/index'
 import { localeFromPath } from '../i18n/paths'
+import { buildSearchIndex } from '../search/build'
+import { searchDocuments } from '../search/match'
 
 export interface McpTool {
   name: string
@@ -67,6 +69,73 @@ export function createMcpTools(source: DocsSource, config: DocsConfig): McpTool[
     },
 
     {
+      name: 'search-docs',
+      description: [
+        'Searches the documentation for pages matching a query.',
+        '',
+        'WHEN TO USE: when looking for documentation on a specific topic, feature, or',
+        'keyword. Returns ranked matches with short excerpts.',
+        '',
+        'WHEN NOT TO USE: if you already know the exact path (call get-page) or want',
+        'a high-level list of all available pages (call list-pages).',
+        '',
+        'WORKFLOW: search for relevant pages, pick a matching path from the results,',
+        'then call get-page for its full contents.',
+      ].join('\n'),
+      annotations: READ_ONLY,
+      inputSchema: {
+        type: 'object',
+        properties: {
+          query: {
+            type: 'string',
+            description:
+              'Search query or keywords to look for, e.g. "installation" or "navigation".',
+          },
+          locale: {
+            type: 'string',
+            description: 'Restrict the search to one locale, e.g. "en". Omit to search all pages.',
+          },
+          limit: {
+            type: 'number',
+            description: 'Maximum number of results to return (default 8, maximum 20).',
+          },
+        },
+        required: ['query'],
+        additionalProperties: false,
+      },
+      async handler({ query, locale, limit }) {
+        if (typeof query !== 'string' || !query.trim()) {
+          throw new Error('`query` is required and must be a non-empty string')
+        }
+
+        const index = await buildSearchIndex(source, config.i18n)
+        const wanted = typeof locale === 'string' ? locale : undefined
+        const documents = wanted
+          ? index.documents.filter(page => page.locale === wanted)
+          : index.documents
+
+        const max =
+          typeof limit === 'number' && Number.isFinite(limit)
+            ? Math.min(Math.max(Math.floor(limit), 1), 20)
+            : 8
+
+        const results = searchDocuments(documents, query, max)
+
+        return {
+          results: results.map(result => ({
+            title: result.document.title,
+            path: result.document.path,
+            url: pageUrl(config, result.document.path),
+            ...(result.document.section ? { section: result.document.section } : {}),
+            ...(result.document.description ? { description: result.document.description } : {}),
+            ...(result.heading ? { heading: result.heading.text } : {}),
+            ...(result.excerpt ? { excerpt: result.excerpt } : {}),
+          })),
+        }
+      },
+    },
+
+    {
       name: 'get-page',
       description: [
         'Retrieves the full markdown of one documentation page.',
@@ -75,7 +144,7 @@ export function createMcpTools(source: DocsSource, config: DocsConfig): McpTool[
         'by the user. Use it before answering questions about specific behaviour, so',
         'the answer comes from the documentation rather than memory.',
         '',
-        'WHEN NOT TO USE: if you do not know the path yet — call list-pages first.',
+        'WHEN NOT TO USE: if you do not know the path yet — call search-docs or list-pages first.',
       ].join('\n'),
       annotations: READ_ONLY,
       inputSchema: {
@@ -84,7 +153,7 @@ export function createMcpTools(source: DocsSource, config: DocsConfig): McpTool[
           path: {
             type: 'string',
             description:
-              'Exact page path from list-pages, e.g. "/docs/getting-started/installation".',
+              'Exact page path from search-docs or list-pages, e.g. "/docs/getting-started/installation".',
           },
         },
         required: ['path'],
@@ -100,7 +169,9 @@ export function createMcpTools(source: DocsSource, config: DocsConfig): McpTool[
         const page = pages.find(candidate => candidate.path === normalized)
 
         if (!page) {
-          throw new Error(`No page at "${normalized}". Call list-pages to see the available paths.`)
+          throw new Error(
+            `No page at "${normalized}". Call search-docs or list-pages to see the available paths.`,
+          )
         }
 
         return {

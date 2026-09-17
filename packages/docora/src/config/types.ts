@@ -38,6 +38,7 @@ export interface DocsConfig {
     }
     links?: NavLink[]
     search?: boolean
+    searchPosition?: 'right' | 'center'
   }
 
   navigation?: NavItem[]

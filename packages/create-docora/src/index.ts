@@ -210,7 +210,7 @@ async function main(argv: string[]): Promise<number> {
     return 2
   }
 
-  const interactive = isInteractive()
+  const interactive = isInteractive() && !options.yes
 
   if (interactive) {
     process.stdout.write(`\n${DOCORA_WORDMARK}\n\n`)
@@ -229,6 +229,20 @@ async function main(argv: string[]): Promise<number> {
   const relativeTarget = path.relative(cwd, target) || '.'
   const templates = await listTemplates()
   const template = await resolveTemplate(options.template, templates, interactive)
+  const manager = await resolvePackageManager(options.packageManager, interactive)
+  const gitInit = await resolveGitInit(options.gitInit, interactive)
+
+  if (options.yes) {
+    const defaults: string[] = []
+    if (!options.directory) defaults.push(`directory: ${colors.cyan(DEFAULT_DIRECTORY)}`)
+    if (!options.template) defaults.push(`template: ${colors.cyan(template)}`)
+    if (!options.packageManager) defaults.push(`package manager: ${colors.cyan(manager)}`)
+    if (options.gitInit === undefined) defaults.push(`git init: ${colors.cyan('no')}`)
+
+    if (defaults.length > 0) {
+      log.info(`Using defaults (--yes): ${defaults.join(', ')}`)
+    }
+  }
 
   log.step(`Creating project in ${colors.cyan(relativeTarget)}`)
 
@@ -244,9 +258,6 @@ async function main(argv: string[]): Promise<number> {
     log.error((error as Error).message)
     return 1
   }
-
-  const manager = await resolvePackageManager(options.packageManager, interactive)
-  const gitInit = await resolveGitInit(options.gitInit, interactive)
 
   const setupTasks: Task[] = []
 

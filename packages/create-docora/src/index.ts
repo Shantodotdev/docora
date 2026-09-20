@@ -232,7 +232,7 @@ async function main(argv: string[]): Promise<number> {
   const manager = await resolvePackageManager(options.packageManager, interactive)
   const gitInit = await resolveGitInit(options.gitInit, interactive)
 
-  if (options.yes) {
+  if (!interactive) {
     const defaults: string[] = []
     if (!options.directory) defaults.push(`directory: ${colors.cyan(DEFAULT_DIRECTORY)}`)
     if (!options.template) defaults.push(`template: ${colors.cyan(template)}`)
@@ -240,7 +240,10 @@ async function main(argv: string[]): Promise<number> {
     if (options.gitInit === undefined) defaults.push(`git init: ${colors.cyan('no')}`)
 
     if (defaults.length > 0) {
-      log.info(`Using defaults (--yes): ${defaults.join(', ')}`)
+      const prefix = options.yes
+        ? 'Using defaults (--yes)'
+        : 'Running in non-interactive mode — using defaults'
+      log.info(`${prefix}: ${defaults.join(', ')}`)
     }
   }
 

@@ -29,16 +29,20 @@ function pageUrl(config: DocsConfig, path: string): string {
  * Normalizes a section query or category title into a clean URL-friendly slug.
  * Handles title casing ("Getting Started"), route paths ("/docs/getting-started/"),
  * and raw slugs ("getting-started") uniformly.
+ *
+ * Note: Characters outside ASCII alphanumeric, hyphen, and underscore are stripped
+ * rather than transliterated; localized section queries should match the exact
+ * section title label.
  */
 function slugifySection(text: string): string {
   return (
     text
       .toLowerCase()
       .trim()
+      // Strip leading and trailing slashes first
+      .replace(/^\/+|\/+$/g, '')
       // Strip leading "docs/" if provided as a route path prefix
       .replace(/^docs\//, '')
-      // Strip leading and trailing slashes
-      .replace(/^\/+|\/+$/g, '')
       // Convert whitespace sequences into hyphens
       .replace(/\s+/g, '-')
       // Remove any remaining characters outside ASCII alphanumeric, hyphen, and underscore
@@ -94,11 +98,7 @@ function findSectionItem(items: NavItem[], section: string): NavItem | undefined
   // 3. Fallback to path suffix / leaf link match
   for (const item of items) {
     const itemHref = item.href ? item.href.toLowerCase().replace(/^\/+|\/+$/g, '') : ''
-    if (
-      itemHref &&
-      querySlug &&
-      (itemHref.endsWith(`/${querySlug}`) || itemHref.includes(querySlug))
-    ) {
+    if (itemHref && querySlug && itemHref.endsWith(`/${querySlug}`)) {
       return item
     }
   }
@@ -109,8 +109,15 @@ function findSectionItem(items: NavItem[], section: string): NavItem | undefined
 function pruneDepth(items: NavItem[], currentDepth: number, maxDepth: number): NavItem[] {
   return items.map(item => {
     const { children, ...rest } = item
-    if (!children || children.length === 0 || currentDepth >= maxDepth) {
+    if (!children || children.length === 0) {
       return rest
+    }
+    if (currentDepth >= maxDepth) {
+      return {
+        ...rest,
+        hasChildren: true,
+        childCount: children.length,
+      }
     }
     return {
       ...rest,
@@ -193,7 +200,7 @@ export function createMcpTools(source: DocsSource, config: DocsConfig): McpTool[
           depth: {
             type: 'number',
             description:
-              'Maximum depth of categories to return (e.g. 1 for top-level only). Omit for full depth.',
+              'Maximum depth of categories to return (e.g. 1 for top-level only, 2 to include direct children). Omit for full depth.',
           },
         },
         additionalProperties: false,
@@ -214,8 +221,7 @@ export function createMcpTools(source: DocsSource, config: DocsConfig): McpTool[
 
         if (typeof depth === 'number' && Number.isFinite(depth)) {
           const maxDepth = Math.max(1, Math.floor(depth))
-          const initialDepth = typeof section === 'string' && section.trim() ? 0 : 1
-          items = pruneDepth(items, initialDepth, maxDepth)
+          items = pruneDepth(items, 1, maxDepth)
         }
 
         return {

@@ -25,7 +25,7 @@ function Logo() {
   const title = config.header?.title ?? config.site.name
 
   return (
-    <Link href="/" className="flex items-center gap-2 transition-opacity hover:opacity-70">
+    <Link href="/" className="flex shrink-0 items-center gap-2 transition-opacity hover:opacity-70">
       <BrandMark priority />
       <span className="font-semibold tracking-tight whitespace-nowrap">{title}</span>
     </Link>
@@ -39,7 +39,7 @@ export function SiteHeader({ children, logo, cta, className }: SiteHeaderProps) 
   const links = config.header?.links ?? []
   const socials = Object.entries(config.socials ?? {}).filter(([, url]) => Boolean(url))
   const showSearch = config.header?.search !== false
-  const searchPosition = config.header?.searchPosition ?? 'right'
+  const searchPosition = config.header?.searchPosition ?? 'center'
   const showThemeToggle = !config.colorMode?.forced
 
   return (
@@ -49,13 +49,23 @@ export function SiteHeader({ children, logo, cta, className }: SiteHeaderProps) 
         className,
       )}
     >
-      <div className="mx-auto flex h-full w-full max-w-8xl items-center gap-3 px-4 sm:px-6">
-        <div className="flex shrink-0 items-center gap-3">
+      <div
+        className={cn(
+          'mx-auto flex h-full w-full max-w-8xl items-center gap-3 px-4 sm:px-6',
+          showSearch &&
+            searchPosition === 'center' &&
+            'md:grid md:grid-cols-[1fr_minmax(0,28rem)_1fr]',
+        )}
+      >
+        <div className="flex min-w-0 items-center gap-3">
           <MobileNav />
           {logo ?? <Logo />}
 
           {links.length > 0 && (
-            <nav aria-label="Main" className="ml-4 hidden items-center gap-4 lg:flex">
+            <nav
+              aria-label="Main"
+              className="ml-4 hidden min-w-0 items-center gap-4 overflow-x-auto lg:flex scrollbar-none"
+            >
               {links.map(link => {
                 const external = link.external ?? link.href.startsWith('http')
                 const isActive =
@@ -84,14 +94,19 @@ export function SiteHeader({ children, logo, cta, className }: SiteHeaderProps) 
         </div>
 
         {showSearch && searchPosition === 'center' && (
-          <div className="mx-4 hidden h-full min-w-0 max-w-sm flex-1 items-center md:flex">
+          <div className="hidden h-full items-center justify-center md:flex">
             <SearchButton className="w-full" />
           </div>
         )}
 
-        <div className="ml-auto flex shrink-0 items-center justify-end gap-1">
+        <div
+          className={cn(
+            'flex shrink-0 items-center justify-end gap-1',
+            showSearch && searchPosition === 'center' ? 'ml-auto md:ml-0' : 'ml-auto',
+          )}
+        >
           {showSearch && searchPosition === 'right' && (
-            <SearchButton className="mr-1 hidden md:inline-flex w-52 lg:w-60" />
+            <SearchButton className="me-1 hidden md:inline-flex w-52 lg:w-60" />
           )}
           {showSearch && <SearchButton className="md:hidden" iconOnly />}
           {children}

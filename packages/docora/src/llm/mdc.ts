@@ -52,8 +52,9 @@ function restoreCodeBlocks(content: string, blocks: string[]): string {
 export function normalizeMdcToMarkdown(raw: string): string {
   if (!raw || !raw.trim()) return ''
 
-  // Step 1: Shield code blocks so MDC-like examples inside code blocks remain completely untouched
-  const { shielded, blocks } = shieldCodeBlocks(raw)
+  // Step 1: Shield code blocks so MDC-like examples inside code blocks remain completely untouched.
+  // Normalize CRLF to LF so regex line ending lookaheads ($ and \n) work consistently across platforms.
+  const { shielded, blocks } = shieldCodeBlocks(raw.replace(/\r\n/g, '\n'))
   let text = shielded
 
   // Step 2: Normalize callout/alert directives (e.g. ::note, :::tip{title="..."}, ::callout{color="..."})
@@ -185,9 +186,9 @@ export function normalizeMdcToMarkdown(raw: string): string {
   // Strip any remaining closing colons (::, :::, ::::) on their own lines
   text = text.replace(/(?:\n|^)\s*:{2,}\s*(?=\n|$)/g, '\n')
 
-  // Step 11: Clean up excessive blank lines (3+ newlines -> 2)
+  // Step 13: Clean up excessive blank lines (3+ newlines -> 2)
   text = text.replace(/\n{3,}/g, '\n\n')
 
-  // Step 12: Restore code blocks completely intact
+  // Step 14: Restore code blocks completely intact
   return restoreCodeBlocks(text, blocks).trim()
 }
